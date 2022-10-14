@@ -62,7 +62,6 @@ export default function() {
       await router.push(DASHBOARD_ROUTE)
       setLoading(false)
     } else {
-      console.log("--in error--")
       setError(true)
       setLoading(false)
     }
