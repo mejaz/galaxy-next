@@ -1,7 +1,13 @@
 import React from 'react';
+import CustomAlert from "../components/CustomAlert";
 
-export default function () {
+export default function Dashboard() {
   return (
-    <h1>dashboard</h1>
+    <div>
+      <h1>dashboard</h1>
+      <CustomAlert msg={"Hello"} severity={'error'}/>
+    </div>
   )
 }
+
+Dashboard.authRequired = true

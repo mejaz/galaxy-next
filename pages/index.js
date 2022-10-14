@@ -1,12 +1,11 @@
 import React from 'react';
 import {useRouter} from "next/router";
+import Button from "@mui/material/Button";
 
 export default function Index() {
   const router = useRouter()
 
-  React.useEffect(() => {
-    // TODO: Check if logged in then dashboard else login page
-    router.push('/login')
-  }, [])
-  return null
+  return (
+    <Button variant={'outlined'} onClick={() => router.push("/login")}>Login</Button>
+  )
 }
