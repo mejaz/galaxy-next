@@ -4,21 +4,26 @@ import Footer from "./Footer";
 import Main from "./Main";
 import PrivateHeader from "./PrivateHeader";
 import PublicHeader from "./PublicHeader";
+import Box from "@mui/material/Box";
+import Sidebar from "./Sidebar";
 
 const LayoutComponent = styled('div')(({theme}) => ({
-  zIndex: -3,
-  overflow: 'auto',
-  // backgroundColor: "#e5dbdb",
+	// zIndex: 1000,
+	overflow: 'auto',
+	// backgroundColor: "#e5dbdb",
 }));
 
-export default function ({children}) {
-  return (
-    <LayoutComponent>
-      <PublicHeader />
-      <Main>
-        {children}
-      </Main>
-      <Footer/>
-    </LayoutComponent>
-  )
+export default function Layout({children, isLoggedIn}) {
+	return (
+		<LayoutComponent>
+			{isLoggedIn ? <PrivateHeader/> : <PublicHeader/>}
+			<Main>
+				<Box sx={{display: 'flex', flex: 1, width: '100%', overflowY: 'auto',}}>
+					{isLoggedIn ? <Sidebar/> : null}
+					{children}
+				</Box>
+			</Main>
+			<Footer/>
+		</LayoutComponent>
+	)
 }

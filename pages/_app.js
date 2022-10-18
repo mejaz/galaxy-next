@@ -6,22 +6,22 @@ import Layout from "../components/Layout";
 import AuthGuard from "../components/AuthGuard";
 
 function MyApp({Component, pageProps}) {
-  return (
-    <React.Fragment>
-      <CssBaseline/>
-      <MuiThemeProvider theme={theme}>
-        <Layout>
-          {
-            Component.authRequired
-              ? <AuthGuard>
-                  <Component {...pageProps} />
-                </AuthGuard>
-              : <Component {...pageProps} />
-          }
-        </Layout>
-      </MuiThemeProvider>
-    </React.Fragment>
-  )
+	return (
+		<React.Fragment>
+			<CssBaseline/>
+			<MuiThemeProvider theme={theme}>
+				{
+					Component.authRequired
+						? <AuthGuard>
+							<Layout>
+								<Component {...pageProps} />
+							</Layout>
+						</AuthGuard>
+						: <Layout><Component {...pageProps} /></Layout>
+				}
+			</MuiThemeProvider>
+		</React.Fragment>
+	)
 }
 
 export default MyApp

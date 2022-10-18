@@ -12,7 +12,7 @@ import {
 import {LoadingButton} from '@mui/lab';
 import {useForm} from "react-hook-form";
 import LockOpenIcon from '@mui/icons-material/LockOpen';
-import FormErrorText from "../components/FormErrorText";
+import FormErrorText from "../components/form/FormErrorText";
 import {useRouter} from "next/router";
 import CustomAlert from "../components/CustomAlert";
 
@@ -38,7 +38,7 @@ const Container = ({children}) => {
   )
 }
 
-export default function() {
+export default function Login() {
   const [loading, setLoading] = React.useState(false)
   const {register, handleSubmit, formState: {errors}} = useForm();
   const [error, setError] = React.useState(false)

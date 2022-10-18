@@ -4,7 +4,7 @@ import {useRouter} from "next/router";
 const LOGIN_PAGE_ROUTE = '/login'
 const VERIFY_TOKEN_API_URL = '/api/verify-token'
 
-export default function ({children}) {
+export default function AuthGuard({children}) {
   const router = useRouter()
   const [isLoggedIn, setLoggedIn] = React.useState(false)
 
@@ -27,6 +27,9 @@ export default function ({children}) {
     return <h1>Loading...</h1>
   }
 
+  const childClone = React.cloneElement(children, {
+    isLoggedIn: isLoggedIn
+  })
 
-  return <>{children}</>
+  return childClone
 }
