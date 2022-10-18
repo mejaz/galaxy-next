@@ -45,7 +45,7 @@ export default function Add() {
 	const {control, handleSubmit, formState: {errors}} = useForm({mode: 'onTouched'});
 	const [allCountries, setAllCountries] = React.useState([])
 	const [localCountry, setLocalCountry] = React.useState('ARE')
-	const [permanentCountry, setPermanentCountry] = React.useState('')
+	const [permanentCountry, setPermanentCountry] = React.useState('AFG')
 	const [localCities, setLocalCities] = React.useState([])
 	const [permanentCities, setPermanentCities] = React.useState([])
 	// const [error, setError] = React.useState(false)
