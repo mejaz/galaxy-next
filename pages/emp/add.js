@@ -24,6 +24,7 @@ import Button from "@mui/material/Button";
 import {Stack} from "@mui/system";
 import useSWR from 'swr';
 import CustomAutoCompleteField from "../../components/form/CustomAutoCompleteField";
+import CustomAlert from "../../components/CustomAlert";
 
 
 const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Add Employee`
@@ -35,6 +36,8 @@ const GENDERS = [
 	{key: MALE_KEY, label: MALE},
 	{key: FEMALE_KEY, label: FEMALE},
 ]
+const SUBMIT_URL = '/api/user/add'
+const SUCCESS_MESSAGE = 'Form Submitted Successfully'
 
 // countries fetcher
 const COUNTRIES_URL = '/api/countries.json'
@@ -42,13 +45,16 @@ const fetcher = (url, headers) => fetch(url, {headers}).then((res) => res.json()
 
 export default function Add() {
 	const [loading, setLoading] = React.useState(false)
-	const {control, handleSubmit, formState: {errors}} = useForm({mode: 'onTouched'});
+	const {control, handleSubmit, reset, formState: {errors}} = useForm({mode: 'onTouched'});
 	const [allCountries, setAllCountries] = React.useState([])
 	const [localCountry, setLocalCountry] = React.useState('ARE')
 	const [permanentCountry, setPermanentCountry] = React.useState('AFG')
 	const [localCities, setLocalCities] = React.useState([])
 	const [permanentCities, setPermanentCities] = React.useState([])
-	// const [error, setError] = React.useState(false)
+	const [formSubmitSuccess, setFormSubmitSuccess] = React.useState(false)
+	const [gotError, setGotError] = React.useState(false)
+	const [errorMsg, setErrorMsg] = React.useState(false)
+	const [gotSuccess, setGotSuccess] = React.useState(false)
 
 	const headers = {
 		Authorization: `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`,
@@ -80,13 +86,37 @@ export default function Add() {
 		}
 	}, [permanentCountry])
 
+	React.useEffect(() => {
+		reset()
+	}, [formSubmitSuccess])
+
 	const dateFnsObj = new DateFnsUtils()
 	const minDob = dateFnsObj.addMonths(dateFnsObj.date(), +process.env.NEXT_PUBLIC_MIN_DOB_MONTHS)
 	const maxDob = dateFnsObj.addMonths(dateFnsObj.date(), +process.env.NEXT_PUBLIC_MAX_DOB_MONTHS)
 	const minDoj = dateFnsObj.addMonths(dateFnsObj.date(), +process.env.NEXT_PUBLIC_MIN_DOJ_MONTHS)
 	const maxDoj = dateFnsObj.date()
 
-	const formSubmit = (data) => console.log(data)
+	const formSubmit = async(data) => {
+		data['primaryMobile'] = `+971${data['primaryMobile']}`
+		data['secondaryMobile'] = data['secondaryMobile'] ? `+971${data['secondaryMobile']}` : null
+
+		console.log('--data--', data)
+
+		let response = await fetch(SUBMIT_URL, {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers
+		})
+
+		if (response.ok) {
+			setGotSuccess(true)
+			setFormSubmitSuccess(true)
+		} else {
+			response = await response.json()
+			setGotError(true)
+			setErrorMsg(response.message)
+		}
+	}
 
 	return (
 		<Container>
@@ -114,7 +144,7 @@ export default function Add() {
 								<Grid container columnSpacing={4}>
 									<Grid item xs={12} md={6}>
 										<CustomInputField
-											id={'fname'}
+											id={'firstName'}
 											label={'First Name'}
 											isRequired={true}
 											maxLength={50}
@@ -123,7 +153,7 @@ export default function Add() {
 											defaultValue={''}
 										/>
 										<CustomInputField
-											id={'lname'}
+											id={'lastName'}
 											label={'Last Name'}
 											isRequired={true}
 											maxLength={50}
@@ -168,7 +198,7 @@ export default function Add() {
 									</Grid>
 									<Grid item xs={12} md={6}>
 										<CustomMobileNoField
-											id={'pmob'}
+											id={'primaryMobile'}
 											label={"Primary Mobile"}
 											control={control}
 											isRequired={true}
@@ -177,7 +207,7 @@ export default function Add() {
 									</Grid>
 									<Grid item xs={12} md={6}>
 										<CustomMobileNoField
-											id={'smob'}
+											id={'secondaryMobile'}
 											label={"Secondary Mobile"}
 											control={control}
 											isRequired={false}
@@ -316,26 +346,10 @@ export default function Add() {
 					</Card>
 				</Grid>
 			</Grid>
-			{/*<CustomAlert msg={INVALID_LOGIN_MSG} severity={"error"} isOpen={error} />*/}
+			{gotError && <CustomAlert msg={errorMsg} severity={"error"} isOpen={gotError} parentStateFunc={setGotError}/>}
+			{gotSuccess && <CustomAlert msg={SUCCESS_MESSAGE} severity={"success"} isOpen={gotSuccess} parentStateFunc={setGotSuccess}/>}
 		</Container>
 	)
 }
-
-// export async function getStaticProps () {
-// 	const COUNTRIES_URL = '/countries.json'
-// 	// fetcher function
-// 	const headers = {
-// 		Authorization: `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`,
-// 		'Content-type': 'application/json'
-// 	}
-// 	let countriesWithStates = await fetch(COUNTRIES_URL, {headers})
-// 	console.log("--countriesWithStates--", typeof countriesWithStates)
-// 	return {
-// 		props: {
-// 			countriesWithStates
-// 		}
-// 	}
-//
-// }
 
 Add.authRequired = true
