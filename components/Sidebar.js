@@ -54,7 +54,7 @@ export default function Sidebar() {
 								<ListItemIcon>
 									<SummarizeOutlinedIcon />
 								</ListItemIcon>
-								<ListItemText primary={'Salary Certificates'}/>
+								<ListItemText primary={'Issued Certificates'}/>
 							</ListItemButton>
 						</ListItem>
 				</List>

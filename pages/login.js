@@ -12,7 +12,7 @@ import {
 import {LoadingButton} from '@mui/lab';
 import {useForm} from "react-hook-form";
 import LockOpenIcon from '@mui/icons-material/LockOpen';
-import FormErrorText from "../components/form/FormErrorText";
+import FormErrorText from "../components/form/partials/FormErrorText";
 import {useRouter} from "next/router";
 import CustomAlert from "../components/CustomAlert";
 
