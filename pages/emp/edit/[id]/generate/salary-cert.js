@@ -8,10 +8,13 @@ import {useForm} from "react-hook-form";
 import {LoadingButton} from "@mui/lab";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import CustomMobileNoField from "../../../../../components/form/partials/CustomMobileNoField";
+import {useRouter} from "next/router";
 
 const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Generate Salary Certificate`
 
 const SalaryCertificateForm = () => {
+	const router = useRouter()
+	const {id} = router.query
 	const [loading, setLoading] = React.useState(false)
 	// react hook form config
 	const {
@@ -21,9 +24,28 @@ const SalaryCertificateForm = () => {
 		mode: 'onTouched',
 	});
 
-	const formSubmit = (data) => {
+	const formSubmit = async (data) => {
 		setLoading(true)
+		const SUBMIT_URL = `/api/user/generate/${id}`
 		console.log(data)
+		data['formType'] = '10'
+
+		const headers = {
+			Authorization: `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`,
+			'Content-type': 'application/json'
+		}
+
+		let response = await fetch(SUBMIT_URL, {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers: headers
+		})
+
+		if(response.ok) {
+			console.log('success')
+		} else {
+			alert('error')
+		}
 
 		setLoading(false)
 	}
@@ -45,7 +67,7 @@ const SalaryCertificateForm = () => {
 							id={"docNo"}
 							label={"Document Number"}
 							isRequired={true}
-							maxLength={10}
+							maxLength={20}
 							control={control}
 							errors={errors}
 							placeholder="HRD/SC/2022/xxx/AIFIxxx"
@@ -56,7 +78,7 @@ const SalaryCertificateForm = () => {
 							id={"passportNo"}
 							label={"Passport Number"}
 							isRequired={true}
-							maxLength={10}
+							maxLength={20}
 							control={control}
 							errors={errors}
 							defaultValue={""}
