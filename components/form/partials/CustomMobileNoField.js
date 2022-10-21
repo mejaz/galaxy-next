@@ -10,7 +10,8 @@ export default function CustomMobileNoField({
 	 maxLength,
 	 control,
 	 errors,
-	 defaultValue = ""
+	 defaultValue = "",
+	 adornVal = ""
  }) {
 	return (
 		<FormControl variant="standard">
@@ -20,7 +21,10 @@ export default function CustomMobileNoField({
 				control={control}
 				rules={{
 					required: isRequired,
-					maxLength: maxLength
+					maxLength: maxLength,
+					validate: {
+						isDigits: value => /^\d+$/.test(value),
+				}
 				}}
 				defaultValue={defaultValue}
 				render={({field: {onBlur, onChange, value}}) => (
@@ -29,11 +33,12 @@ export default function CustomMobileNoField({
 						value={value}
 						onBlur={onBlur}
 						onChange={onChange}
-						startAdornment={<InputAdornment position="start">+971</InputAdornment>}
+						startAdornment={<InputAdornment position="start">{adornVal}</InputAdornment>}
 					/>
 				)}/>
 			{errors[id]?.type === 'required' && <FormErrorText text={`${label} is Required`}/>}
 			{errors[id]?.type === 'maxLength' && <FormErrorText text={`Cannot be more than ${maxLength} chars`}/>}
+			{errors[id]?.type === 'isDigits' && <FormErrorText text={`Only digits allowed`}/>}
 		</FormControl>
 	)
 }

@@ -14,6 +14,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import useSWR from 'swr';
 import {useForm} from "react-hook-form";
 import CustomAlert from "../CustomAlert";
+import MainCardLayout from "../MainCardLayout";
 
 const MALE_KEY = 'M'
 const FEMALE_KEY = 'F'
@@ -131,12 +132,8 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
 		setLoading(false)
 	}
 
-	return <Card sx={{width: "100%", pt: 3}} elevation={0}>
-		<CardHeader
-			title={title}
-			sx={{color: "secondary.light", borderRadius: "5px"}}
-		/>
-		<CardContent sx={{width: "100%"}}>
+	return <>
+		<MainCardLayout title={title}>
 			<Box component={"form"}
 					 sx={{
 						 mb: "0",
@@ -218,10 +215,12 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
 							</Button>
 						</Stack>
 					</Grid>
+
 					<Grid item xs={12} md={6}>
 						<CustomMobileNoField
 							id={"primaryMobile"}
 							label={"Primary Mobile"}
+							adornVal={"+971"}
 							control={control}
 							isRequired={true}
 							errors={errors}
@@ -231,6 +230,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
 						<CustomMobileNoField
 							id={"secondaryMobile"}
 							label={"Secondary Mobile"}
+							adornVal={"+971"}
 							control={control}
 							isRequired={false}
 							errors={errors}
@@ -364,9 +364,9 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
 					</LoadingButton>
 				</Box>
 			</Box>
-		</CardContent>
+		</MainCardLayout>
 		{gotError && <CustomAlert msg={errorMsg} severity={"error"} isOpen={gotError} parentStateFunc={setGotError}/>}
 		{gotSuccess &&
 			<CustomAlert msg={SUCCESS_MESSAGE} severity={"success"} isOpen={gotSuccess} parentStateFunc={setGotSuccess}/>}
-	</Card>;
+	</>
 }

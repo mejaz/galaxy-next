@@ -11,7 +11,8 @@ export default function CustomInputField({
 	 control,
 	 errors,
 	 defaultValue = "",
-   disable=false
+   disable=false,
+	placeholder=""
  }) {
 	return (
 		<FormControl variant="standard">
@@ -31,6 +32,7 @@ export default function CustomInputField({
 						onBlur={onBlur}
 						onChange={onChange}
 						disabled={disable}
+						placeholder={placeholder}
 					/>
 				)}/>
 			{errors[id]?.type === 'required' && <FormErrorText text={`${label} is Required`}/>}
