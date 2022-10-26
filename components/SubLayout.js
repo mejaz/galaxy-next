@@ -5,16 +5,16 @@ import {Grid} from "@mui/material";
 
 export default function SubLayout({pageTitle, component1, component2=null}) {
 	return (
-		<Container>
+		<Container maxWidth={'xxl'}>
 			<Head>
 				<title>{pageTitle}</title>
 				<meta name="description" content="Office home"/>
 			</Head>
 			<Grid container>
-				<Grid item xs={12} md={9}>
+				<Grid item xs={12} md={8} lg={9} >
 					{component1}
 				</Grid>
-				<Grid item xs={12} md={3}>
+				<Grid item xs={12} md={4} lg={3}>
 					{component2}
 				</Grid>
 			</Grid>

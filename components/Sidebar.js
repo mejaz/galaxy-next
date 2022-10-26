@@ -12,6 +12,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import {useRouter} from "next/router";
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 
 const drawerWidth = 240;
 
@@ -50,11 +51,22 @@ export default function Sidebar() {
 				<Divider/>
 				<List>
 						<ListItem disablePadding>
-							<ListItemButton onClick={() => router.push('/certificate/salary')}>
+							<ListItemButton onClick={() => router.push('/documents/search')}>
+								<ListItemIcon>
+									<WorkspacePremiumIcon />
+								</ListItemIcon>
+								<ListItemText primary={'Designations'}/>
+							</ListItemButton>
+						</ListItem>
+				</List>
+				<Divider />
+				<List>
+						<ListItem disablePadding>
+							<ListItemButton onClick={() => router.push('/documents/search')}>
 								<ListItemIcon>
 									<SummarizeOutlinedIcon />
 								</ListItemIcon>
-								<ListItemText primary={'Issued Certificates'}/>
+								<ListItemText primary={'Search Document'}/>
 							</ListItemButton>
 						</ListItem>
 				</List>

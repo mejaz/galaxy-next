@@ -50,7 +50,7 @@ const PublicHeader = (props) => {
 
   return (
     <AppBar elevation={0} position="sticky" sx={{zIndex: 1, bgcolor: "primary", color: "common.white"}}>
-      <Container maxWidth="xl">
+      <Container maxWidth="xxl">
         <Toolbar disableGutters>
           {/* --- desktop view --- */}
           <Typography

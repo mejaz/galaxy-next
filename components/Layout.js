@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import Main from "./Main";
 import PrivateHeader from "./PrivateHeader";
 import PublicHeader from "./PublicHeader";
-import Box from "@mui/material/Box";
+import {Box, Grid} from "@mui/material";
 import Sidebar from "./Sidebar";
 
 const LayoutComponent = styled('div')(({theme}) => ({

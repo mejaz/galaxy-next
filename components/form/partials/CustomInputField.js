@@ -1,5 +1,5 @@
 import React from 'react';
-import {FormControl, Input, InputLabel} from "@mui/material";
+import {FormControl, FormHelperText, Input, InputLabel} from "@mui/material";
 import FormErrorText from "./FormErrorText";
 import {Controller} from "react-hook-form";
 
@@ -12,7 +12,8 @@ export default function CustomInputField({
 	 errors,
 	 defaultValue = "",
    disable=false,
-	placeholder=""
+	 placeholder="",
+	 helperText = ""
  }) {
 	return (
 		<FormControl variant="standard">
@@ -35,6 +36,7 @@ export default function CustomInputField({
 						placeholder={placeholder}
 					/>
 				)}/>
+			{helperText && <FormHelperText id="filled-weight-helper-text">{helperText}</FormHelperText>}
 			{errors[id]?.type === 'required' && <FormErrorText text={`${label} is Required`}/>}
 			{errors[id]?.type === 'maxLength' && <FormErrorText text={`Cannot be more than ${maxLength} chars`}/>}
 		</FormControl>

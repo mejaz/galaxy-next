@@ -14,23 +14,23 @@ export default function QuickLinks({id}) {
 		<Card sx={{width: '100%', my: 5}} elevation={2}>
 			<CardHeader
 				subheader={'Generate:'}
-				sx={{color: 'palette.common.white', borderRadius: '5px', bgcolor: 'secondary.light'}}
+				sx={{color: 'common.white', bgcolor: 'secondary.light', "& .MuiCardHeader-subheader": {color: 'common.white'}}}
 			/>
 			<CardContent sx={{width: 320, p: 0, m: 0}}>
 				<MenuList sx={{p: 0, m: 0}}>
-					<MenuItem divider onClick={() => router.push(`${router.asPath}generate/salary-cert`)}>
+					<MenuItem divider onClick={() => router.push(`/emp/${id}/generate/salary-cert`)}>
 						<ListItemIcon>
 							<AttachMoneyOutlinedIcon fontSize="small"/>
 						</ListItemIcon>
 						<Typography variant={'overline'} color={'secondary'}>Salary Certificate</Typography>
 					</MenuItem>
-					<MenuItem divider onClick={() => router.push(`${router.asPath}generate/salary-transfer-letter`)}>
+					<MenuItem divider onClick={() => router.push(`/emp/${id}/generate/salary-transfer-letter`)}>
 						<ListItemIcon>
 							<CurrencyExchangeOutlinedIcon fontSize="small"/>
 						</ListItemIcon>
 						<Typography variant={'overline'} color={'secondary'}>Salary Transfer Letter</Typography>
 					</MenuItem>
-					<MenuItem onClick={() => router.push(`${router.asPath}generate/experience-letter`)}>
+					<MenuItem onClick={() => router.push(`/emp/${id}/generate/experience-letter`)}>
 						<ListItemIcon>
 							<TrendingUpOutlinedIcon fontSize="small"/>
 						</ListItemIcon>

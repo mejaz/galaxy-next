@@ -14,54 +14,7 @@ const getDate = (dateStr) => {
 	return nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate();
 }
 
-const columns = [
-	{id: 'empId', label: 'Id', minWidth: 50},
-	{id: 'firstName', label: 'First Name', minWidth: 170},
-	{
-		id: 'lastName',
-		label: 'Last Name',
-		minWidth: 170,
-	},
-	{
-		id: 'dob',
-		label: 'D.O.B.',
-		minWidth: 100,
-	},
-	{
-		id: 'primaryMobile',
-		label: 'Primary Mobile',
-		minWidth: 170,
-	},
-	{
-		id: 'action',
-		label: 'Action',
-		minWidth: 100,
-	},
-];
-
-// function createData(date, desc, refNo, debit, credit, balance) {
-//   return { date, desc, refNo, debit, credit, balance };
-// }
-//
-// const rows = [
-//   createData('India', 'IN', 1324171354, 3287263),
-//   createData('China', 'CN', 1403500365, 9596961),
-//   createData('Italy', 'IT', 60483973, 301340),
-//   createData('United States', 'US', 327167434, 9833520),
-//   createData('Canada', 'CA', 37602103, 9984670),
-//   createData('Australia', 'AU', 25475400, 7692024),
-//   createData('Germany', 'DE', 83019200, 357578),
-//   createData('Ireland', 'IE', 4857000, 70273),
-//   createData('Mexico', 'MX', 126577691, 1972550),
-//   createData('Japan', 'JP', 126317000, 377973),
-//   createData('France', 'FR', 67022000, 640679),
-//   createData('United Kingdom', 'GB', 67545757, 242495),
-//   createData('Russia', 'RU', 146793744, 17098246),
-//   createData('Nigeria', 'NG', 200962417, 923768),
-//   createData('Brazil', 'BR', 210147125, 8515767),
-// ];
-
-export default function StickyHeadTable({rows}) {
+export default function StickyHeadTable({rows, cols, actionRoute}) {
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -80,7 +33,7 @@ export default function StickyHeadTable({rows}) {
 				<Table stickyHeader aria-label="sticky table">
 					<TableHead>
 						<TableRow>
-							{columns.map((column, index) => (
+							{cols.map((column, index) => (
 								<TableCell
 									key={column.id}
 									align={column.align}
@@ -97,11 +50,11 @@ export default function StickyHeadTable({rows}) {
 							.map((row) => {
 								return (
 									<TableRow hover role="checkbox" tabIndex={-1} key={row.empId}>
-										{columns.map((column, i) => {
+										{cols.map((column, i) => {
 											const value = row[column.id];
-											return columns.length - 1 === i
+											return cols.length - 1 === i
 												? <TableCell key={column.id} align={column.align}>
-													<Link href={`/emp/edit/${row._id}`}>
+													<Link href={actionRoute.replace("#id", row._id)}>
 														<a>View</a>
 													</Link>
 												</TableCell>

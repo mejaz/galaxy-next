@@ -17,7 +17,7 @@ export default function MainCardLayout({title, children}) {
 		<Card sx={{width: "100%", pt: 3}} elevation={0}>
 			<CardHeader
 				title={title}
-				sx={{color: "secondary.light", borderRadius: "5px"}}
+				sx={{color: "secondary.light"}}
 			/>
 			<CardContent sx={{width: "100%"}}>
 				{children}

@@ -14,8 +14,9 @@ import * as Url from "url";
 import SubLayout from "../../components/SubLayout";
 import UserForm from "../../components/form/UserFrom";
 import SearchForm from "../../components/form/SearchForm";
+import SearchDocs from "../../components/form/SearchDocs";
 
-const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Search Employee`
+const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Search Document`
 
 
 export default function Search() {
@@ -23,7 +24,7 @@ export default function Search() {
 	return (
 		<SubLayout
 			pageTitle={PAGE_TITLE}
-			component1={<SearchForm title={"Search Employee"} />}
+			component1={<SearchDocs title={"Search Document"} />}
 		/>
 
 	)

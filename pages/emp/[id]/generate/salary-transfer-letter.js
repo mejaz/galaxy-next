@@ -1,13 +1,13 @@
 import React from 'react';
-import SubLayout from "../../../../../components/SubLayout";
-import MainCardLayout from "../../../../../components/MainCardLayout";
+import SubLayout from "../../../../components/SubLayout";
+import MainCardLayout from "../../../../components/MainCardLayout";
 import Box from "@mui/material/Box";
 import {Grid} from "@mui/material";
-import CustomInputField from "../../../../../components/form/partials/CustomInputField";
+import CustomInputField from "../../../../components/form/partials/CustomInputField";
 import {useForm} from "react-hook-form";
 import {LoadingButton} from "@mui/lab";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
-import CustomMobileNoField from "../../../../../components/form/partials/CustomMobileNoField";
+import CustomMobileNoField from "../../../../components/form/partials/CustomMobileNoField";
 
 const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Generate Salary Transfer Letter`
 

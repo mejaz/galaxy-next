@@ -23,7 +23,7 @@ export default function CustomMobileNoField({
 					required: isRequired,
 					maxLength: maxLength,
 					validate: {
-						isDigits: value => /^\d+$/.test(value),
+						isDigits: value => value ? /^\d+$/.test(value) : true,
 				}
 				}}
 				defaultValue={defaultValue}
