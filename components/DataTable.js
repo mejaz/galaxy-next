@@ -54,14 +54,14 @@ export default function StickyHeadTable({rows, cols, actionRoute}) {
 											const value = row[column.id];
 											return cols.length - 1 === i
 												? <TableCell key={column.id} align={column.align}>
-													<Link href={actionRoute.replace("#id", row._id)}>
+													<Link href={actionRoute ? actionRoute.replace("#id", row.id) : "#"}>
 														<a>View</a>
 													</Link>
 												</TableCell>
 												: <TableCell key={column.id} align={column.align}>
 													{column.format && typeof value === 'number'
 														? column.format(value)
-														: value}
+														: typeof value === "boolean" ? String(value).toUpperCase() : value}
 												</TableCell>
 										})}
 									</TableRow>

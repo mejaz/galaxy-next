@@ -37,8 +37,8 @@ export default function CustomInputField({
 					/>
 				)}/>
 			{helperText && <FormHelperText id="filled-weight-helper-text">{helperText}</FormHelperText>}
-			{errors[id]?.type === 'required' && <FormErrorText text={`${label} is Required`}/>}
-			{errors[id]?.type === 'maxLength' && <FormErrorText text={`Cannot be more than ${maxLength} chars`}/>}
+			{errors && errors[id]?.type === 'required' && <FormErrorText text={`${label} is Required`}/>}
+			{errors && errors[id]?.type === 'maxLength' && <FormErrorText text={`Cannot be more than ${maxLength} chars`}/>}
 		</FormControl>
 	)
 }
