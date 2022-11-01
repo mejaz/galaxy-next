@@ -11,6 +11,8 @@ import CustomMobileNoField from "../../../../components/form/partials/CustomMobi
 import {useRouter} from "next/router";
 import CustomAlert from "../../../../components/CustomAlert";
 
+const FileSaver = require('file-saver');
+
 const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Generate Salary Certificate`
 const SUCCESS_MESSAGE = "Salary Certificate generated successfully"
 
@@ -39,22 +41,29 @@ const SalaryCertificateForm = () => {
 
     const headers = {
       Authorization: `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`,
-      'Content-type': 'application/json'
+      'Content-type': 'application/json',
     }
 
     let response = await fetch(SUBMIT_URL, {
       method: 'POST',
       body: JSON.stringify(data),
-      headers: headers
+      headers: headers,
     })
 
     if (response.ok) {
-      response = await response.json()
+      let contentDispositionHeader = response.headers.get("Content-Disposition")
+      let filename = contentDispositionHeader.split("filename=").pop()
+      let reqId = filename.split("_")[2]
+
+      response = await response.blob()
+
+      FileSaver.saveAs(response, filename)
       setGotSuccess(true)
       setFormSubmitSuccess(prevState => !prevState)
       setTimeout(() => {
-        router.replace(`/emp/docs/${response.requestId}`)
+        router.replace(`/emp/docs/${reqId}`)
       }, 500)
+
     } else {
       response = await response.json()
       setGotError(true)

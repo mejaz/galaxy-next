@@ -54,7 +54,7 @@ export default function StickyHeadTable({rows, cols, actionRoute}) {
 											const value = row[column.id];
 											return cols.length - 1 === i
 												? <TableCell key={column.id} align={column.align}>
-													<Link href={actionRoute ? actionRoute.replace("#id", row.id) : "#"}>
+													<Link href={actionRoute ? actionRoute.replace("#id", row._id) : "#"}>
 														<a>View</a>
 													</Link>
 												</TableCell>

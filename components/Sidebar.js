@@ -17,60 +17,60 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 const drawerWidth = 240;
 
 export default function Sidebar() {
-	const router = useRouter()
-	return (
-		<Drawer
-			variant="permanent"
-			sx={{
-				zIndex: 0,
-				width: drawerWidth,
-				flexShrink: 0,
-				[`& .MuiDrawer-paper`]: {width: drawerWidth, boxSizing: 'border-box'},
-			}}
-		>
-			<Toolbar/>
-			<Box sx={{overflow: 'auto', paddingTop: '10px !important'}}>
-				<List>
-					<ListItem disablePadding>
-						<ListItemButton onClick={() => router.push('/emp/add')}>
-							<ListItemIcon>
-								<PersonAddOutlinedIcon />
-							</ListItemIcon>
-							<ListItemText primary={'Add Employee'}/>
-						</ListItemButton>
-					</ListItem>
-					<ListItem disablePadding>
-						<ListItemButton onClick={() => router.push('/emp/search')}>
-							<ListItemIcon>
-								<PersonSearchOutlinedIcon />
-							</ListItemIcon>
-							<ListItemText primary={'Search Employee'}/>
-						</ListItemButton>
-					</ListItem>
-				</List>
-				<Divider/>
-				<List>
-						<ListItem disablePadding>
-							<ListItemButton onClick={() => router.push('/documents/search')}>
-								<ListItemIcon>
-									<WorkspacePremiumIcon />
-								</ListItemIcon>
-								<ListItemText primary={'Designations'}/>
-							</ListItemButton>
-						</ListItem>
-				</List>
-				<Divider />
-				<List>
-						<ListItem disablePadding>
-							<ListItemButton onClick={() => router.push('/documents/search')}>
-								<ListItemIcon>
-									<SummarizeOutlinedIcon />
-								</ListItemIcon>
-								<ListItemText primary={'Search Document'}/>
-							</ListItemButton>
-						</ListItem>
-				</List>
-			</Box>
-		</Drawer>
-	);
+  const router = useRouter()
+  return (
+    <Drawer
+      variant="permanent"
+      sx={{
+        zIndex: 0,
+        width: drawerWidth,
+        flexShrink: 0,
+        [`& .MuiDrawer-paper`]: {width: drawerWidth, boxSizing: 'border-box'},
+      }}
+    >
+      <Toolbar/>
+      <Box sx={{overflow: 'auto', paddingTop: '10px !important'}}>
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => router.push('/emp/add')}>
+              <ListItemIcon>
+                <PersonAddOutlinedIcon/>
+              </ListItemIcon>
+              <ListItemText primary={'Add Employee'}/>
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => router.push('/emp/search')}>
+              <ListItemIcon>
+                <PersonSearchOutlinedIcon/>
+              </ListItemIcon>
+              <ListItemText primary={'Search Employee'}/>
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <Divider/>
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => router.push('/designations')}>
+              <ListItemIcon>
+                <WorkspacePremiumIcon/>
+              </ListItemIcon>
+              <ListItemText primary={'Designations'}/>
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <Divider/>
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => router.push('/documents/search')}>
+              <ListItemIcon>
+                <SummarizeOutlinedIcon/>
+              </ListItemIcon>
+              <ListItemText primary={'Search Document'}/>
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </Box>
+    </Drawer>
+  );
 }
