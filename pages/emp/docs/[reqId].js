@@ -1,35 +1,27 @@
 import React from 'react';
 import {useRouter} from "next/router";
-import SubLayout from "../../../components/SubLayout";
-import UserForm from "../../../components/form/UserFrom";
-import DetailForm from "../../../components/form/DetailForm";
+import DetailView from "../../../components/form/DetailView";
+import PageLayout from "../../../components/PageLayout";
+import useDocDetails from "../../../apiHooks/useDocDetails";
+import Loading from "../../../components/Loading";
 
 const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Document Details`
-const DETAILS_URL = "/api/docs"
 
 export default function CertInfo() {
   const router = useRouter()
   const {reqId} = router.query
+  const authToken = `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`
 
-  const [details, setDetails] = React.useState()
+  const {details, isLoading, isError} = useDocDetails(reqId, authToken)
 
-  const headers = {
-    Authorization: `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`,
-    'Content-type': 'application/json'
+  if (isLoading) {
+    return <Loading />
   }
 
-  React.useEffect(() => {
-    fetch(`${DETAILS_URL}/${reqId}`, {headers})
-      .then(response => response.json())
-      .then(obj => setDetails(obj))
-      .catch(error => console.log(error))
-  }, [reqId])
-
   return (
-    <SubLayout
-      pageTitle={PAGE_TITLE}
-      component1={<DetailForm title={"Document Detail"}/>}
-    />
+    <PageLayout pageTitle={PAGE_TITLE}>
+      <DetailView title={"Document Details"} details={details}/>
+    </PageLayout>
   )
 }
 

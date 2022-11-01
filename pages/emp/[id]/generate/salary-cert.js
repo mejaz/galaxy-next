@@ -10,6 +10,7 @@ import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import CustomMobileNoField from "../../../../components/form/partials/CustomMobileNoField";
 import {useRouter} from "next/router";
 import CustomAlert from "../../../../components/CustomAlert";
+import PageLayout from "../../../../components/PageLayout";
 
 const FileSaver = require('file-saver');
 
@@ -155,9 +156,9 @@ const SalaryCertificateForm = () => {
 
 export default function SalaryCert() {
   return (
-    <SubLayout
-      pageTitle={PAGE_TITLE}
-      component1={<SalaryCertificateForm/>}/>
+    <PageLayout pageTitle={PAGE_TITLE}>
+      <SalaryCertificateForm/>
+    </PageLayout>
   )
 }
 

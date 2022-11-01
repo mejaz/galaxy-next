@@ -2,8 +2,9 @@ import React from 'react';
 import {useRouter} from "next/router";
 import UserForm from "../../../../components/form/UserFrom";
 import QuickLinks from "../../../../components/QuickLinks";
-import SubLayout from "../../../../components/SubLayout";
 import useProfile from "../../../../apiHooks/useProfile";
+import PageLayout from "../../../../components/PageLayout";
+import Loading from "../../../../components/Loading";
 
 const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Employee Details`
 
@@ -14,16 +15,14 @@ export default function Edit() {
 	const {profile, error} = useProfile(id, authToken);
 
 	if (!profile) {
-		return <h1>Loading...</h1>
+		return <Loading />
 	}
 
 	return (
-		<SubLayout
-			pageTitle={PAGE_TITLE}
-			component1={<UserForm title={"Employee Details"} defaultValues={profile}
-									isEdit={true} id={id}/>}
-			component2={<QuickLinks id={id}/>}
-		/>
+		<PageLayout pageTitle={PAGE_TITLE} sideComponent={<QuickLinks id={id}/>}>
+			<UserForm title={"Employee Details"} defaultValues={profile}
+									isEdit={true} id={id}/>
+		</PageLayout>
 	)
 }
 
