@@ -6,6 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import {Divider} from "@mui/material";
 
 export default function DocDeleteModal({open, toggleOpen, deleteDocument}) {
   const [disable, setDisable] = React.useState(true)
@@ -19,7 +20,8 @@ export default function DocDeleteModal({open, toggleOpen, deleteDocument}) {
 
   return (
     <Dialog open={open} onClose={toggleOpen}>
-      <DialogTitle>Please Note</DialogTitle>
+      <DialogTitle>Delete Document</DialogTitle>
+      <Divider />
       <DialogContent>
         <DialogContentText color={"error.main"}>
           Document once deleted cannot be restored. Type "delete" below and click the DELETE button to continue, else click
@@ -34,6 +36,7 @@ export default function DocDeleteModal({open, toggleOpen, deleteDocument}) {
           variant="standard"
           placeholder={"delete"}
           onChange={handleChange}
+          sx={{mt: 2}}
         />
       </DialogContent>
       <DialogActions sx={{p: 2}}>

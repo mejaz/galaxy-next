@@ -4,7 +4,6 @@ import List from "@mui/material/List";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import DeleteIcon from '@mui/icons-material/Delete';
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 
 export default function AvailableDesignations({dns, deleteDns}) {
   return (
@@ -18,8 +17,8 @@ export default function AvailableDesignations({dns, deleteDns}) {
                 <ListItem
                   key={obj._id}
                   secondaryAction={
-                    <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon sx={{color: "warning.main"}} onClick={() => deleteDns(obj._id)}/>
+                    <IconButton edge="end" aria-label="delete" onClick={() => deleteDns(obj._id)}>
+                      <DeleteIcon sx={{color: "warning.main"}}/>
                     </IconButton>
                   }
                 >

@@ -22,6 +22,7 @@ import DocDeleteModal from "../modals/DocDeleteModal";
 import UploadIcon from '@mui/icons-material/Upload';
 import MenuItem from "@mui/material/MenuItem";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import FileUploadModal from "../modals/FileUploadModal";
 
 const FileSaver = require('file-saver');
 
@@ -36,87 +37,6 @@ const SpacedItems = ({children}) => (
     {children}
   </Box>)
 
-const GroupButton = () => {
-  const anchorRef = React.useRef(null);
-  const [open, setOpen] = React.useState(false);
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
-
-  const handleClick = () => {
-    console.info(`You clicked ${options[selectedIndex]}`);
-  };
-
-  const handleMenuItemClick = (event, index) => {
-    setSelectedIndex(index);
-    setOpen(false);
-  };
-
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
-
-    setOpen(false);
-  };
-  return (
-    <>
-      <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-        <Button onClick={handleClick}>{options[selectedIndex]}</Button>
-        <Button
-          size="small"
-          aria-controls={open ? 'split-button-menu' : undefined}
-          aria-expanded={open ? 'true' : undefined}
-          aria-label="select merge strategy"
-          aria-haspopup="menu"
-          onClick={handleToggle}
-        >
-          <ArrowDropDownIcon/>
-        </Button>
-      </ButtonGroup>
-      <Popper
-        sx={{
-          zIndex: 1,
-        }}
-        open={open}
-        anchorEl={anchorRef.current}
-        role={undefined}
-        transition
-        disablePortal
-      >
-        {({TransitionProps, placement}) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin:
-                placement === 'bottom' ? 'center top' : 'center bottom',
-            }}
-          >
-            <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
-                <MenuList id="split-button-menu" autoFocusItem>
-                  {options.map((option, index) => (
-                    <MenuItem
-                      key={option}
-                      disabled={index === 2}
-                      selected={index === selectedIndex}
-                      onClick={(event) => handleMenuItemClick(event, index)}
-                    >
-                      {option}
-                    </MenuItem>
-                  ))}
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
-    </>
-  )
-}
-
 export default function DetailView({title, details}) {
   const router = useRouter()
   const headers = {
@@ -124,8 +44,15 @@ export default function DetailView({title, details}) {
     'Content-type': 'application/json',
   }
 
+  const uploadHeaders = {
+    Authorization: `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`,
+  }
+
   const {reqId} = router.query
+  const [loading, setLoading] = React.useState(false)
   const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+  const [openUploadModal, setOpenUploadModal] = React.useState(false);
+  const [isSignedDocAvailable, setIsSignedDocAvailable] = React.useState(Boolean(details.certSignedPath))
 
   const deleteDocument = async () => {
     let response = await fetch(`/api/docs/${reqId}`, {
@@ -141,8 +68,33 @@ export default function DetailView({title, details}) {
     }
   }
 
+  const uploadDocument = async (data) => {
+    setLoading(true)
+    let formData = new FormData()
+    formData.append("docType", details.docType)
+    formData.append("file", data.signedFile[0])
+
+    let response = await fetch(`/api/docs/${reqId}/upload`, {
+      method: 'POST',
+      body: formData,
+      headers: uploadHeaders,
+    })
+
+    if (response.ok) {
+      setOpenUploadModal(false)
+      setIsSignedDocAvailable(true)
+    } else {
+      alert('error')
+    }
+    setLoading(false)
+  }
+
   const toggleDeleteModal = () => {
     setOpenDeleteModal(prevState => !prevState);
+  };
+
+  const toggleUploadModal = () => {
+    setOpenUploadModal(prevState => !prevState);
   };
 
   const downloadDoc = async (signed) => {
@@ -197,16 +149,19 @@ export default function DetailView({title, details}) {
               <SpacedItems>
                 <Typography variant={'overline'}>Signed Document</Typography>
                 {
-                  !details.certSignedPath
+                  isSignedDocAvailable
                     ? <ButtonGroup size="small" aria-label="small button group">
                       {[
-                        <Button size={"small"} variant="contained" color="warning" startIcon={<UploadIcon/>}>Upload</Button>,
+                        <Button size={"small"} variant="outlined" color="info" startIcon={<UploadIcon/>}
+                                onClick={() => toggleUploadModal()}>Upload</Button>,
                         <Button size={"small"} variant="contained" color="success"
-                                startIcon={<DownloadIcon/>}>Download</Button>
+                                startIcon={<DownloadIcon/>} onClick={() => downloadDoc(true)}>Download</Button>
 
                       ]}
-                      </ButtonGroup>
-                    : <Button size={"small"} variant="contained" color="success" startIcon={<UploadIcon/>}>Upload</Button>
+                    </ButtonGroup>
+                    :
+                    <Button size={"small"} variant="contained" color="success" startIcon={<UploadIcon/>}
+                            onClick={() => toggleUploadModal()}>Upload</Button>
                 }
 
               </SpacedItems>
@@ -264,7 +219,22 @@ export default function DetailView({title, details}) {
           >Go Back</Button>
         </Box>
 
-        <DocDeleteModal open={openDeleteModal} toggleOpen={toggleDeleteModal} deleteDocument={deleteDocument}/>
+        <DocDeleteModal
+          open={openDeleteModal}
+          toggleOpen={toggleDeleteModal}
+          deleteDocument={deleteDocument}
+          loading={loading}
+        />
+
+        <FileUploadModal
+          name={"signedFile"}
+          allowedExt={[".pdf"]}
+          title={"Signed Document Upload"}
+          open={openUploadModal}
+          toggleOpen={toggleUploadModal}
+          handleUpload={uploadDocument}
+          loading={loading}
+        />
 
       </Box>
 
