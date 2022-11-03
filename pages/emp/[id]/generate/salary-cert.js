@@ -91,7 +91,7 @@ const SalaryCertificateForm = () => {
               id={"docNo"}
               label={"Document Number"}
               isRequired={true}
-              maxLength={50}
+              maxLength={100}
               control={control}
               errors={errors}
               placeholder="HRD/SC/2022/xxx/AIFIxxx"
@@ -102,7 +102,7 @@ const SalaryCertificateForm = () => {
           <Grid item xs={12} md={4}>
             <CustomInputField
               id={"passportCountry"}
-              label={"Passport Country"}
+              label={"Passport Country (Nation)"}
               isRequired={true}
               maxLength={20}
               control={control}
