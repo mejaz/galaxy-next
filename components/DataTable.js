@@ -35,7 +35,7 @@ export default function StickyHeadTable({rows, cols, actionRoute}) {
 						<TableRow>
 							{cols.map((column, index) => (
 								<TableCell
-									key={column.id}
+									key={index}
 									align={column.align}
 									style={{minWidth: column.minWidth}}
 								>
@@ -47,18 +47,18 @@ export default function StickyHeadTable({rows, cols, actionRoute}) {
 					<TableBody>
 						{rows
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-							.map((row) => {
+							.map((row, index) => {
 								return (
-									<TableRow hover role="checkbox" tabIndex={-1} key={row.empId}>
+									<TableRow hover role="checkbox" tabIndex={-1} key={index}>
 										{cols.map((column, i) => {
 											const value = row[column.id];
 											return cols.length - 1 === i
-												? <TableCell key={column.id} align={column.align}>
+												? <TableCell key={i} align={column.align}>
 													<Link href={actionRoute ? actionRoute.replace("#id", row._id) : "#"}>
 														<a>View</a>
 													</Link>
 												</TableCell>
-												: <TableCell key={column.id} align={column.align}>
+												: <TableCell key={i} align={column.align}>
 													{column.format && typeof value === 'number'
 														? column.format(value)
 														: typeof value === "boolean" ? String(value).toUpperCase() : value}

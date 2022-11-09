@@ -124,7 +124,7 @@ export default function SearchDocs({title}) {
           </Box>
         </Box>
       </MainCardLayout>
-      <StickyHeadTable rows={rows} cols={columns} actionRoute={"/emp/docs/#id"}/>
+      <StickyHeadTable rows={rows} cols={columns} actionRoute={"/docs/#id"}/>
     </>
   )
 }

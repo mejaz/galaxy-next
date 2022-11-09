@@ -8,50 +8,42 @@ import AddModeratorIcon from '@mui/icons-material/AddModerator';
 import AvailableDesignations from "../AvailableDesignations";
 import Loading from "../Loading";
 import useDesignations from "../../apiHooks/useDesignations";
+import postDesignation from "../../apiHooks/postDesignation";
+import useSWRMutation from "swr/mutation";
+import deleteDesignation from "../../apiHooks/deleteDesignation";
+
 
 export default function DesignationForm({title}) {
   const authToken = `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`
   const [dns, setDns] = React.useState([])
-  const { designations, isLoading, isError } = useDesignations(authToken)
+  const {designations, isLoading, mutate} = useDesignations(authToken)
   const {control, handleSubmit, reset, formState: {errors}} = useForm({mode: 'onSubmit'});
+
+  const {trigger: postTrigger} = useSWRMutation(authToken, postDesignation)
+  const {trigger: deleteTrigger} = useSWRMutation(authToken, deleteDesignation)
 
 
   React.useEffect(() => {
     setDns(designations)
   }, [designations])
 
-  const headers = {
-    Authorization: authToken,
-    'Content-type': 'application/json',
-  }
-
   const deleteDns = async (id) => {
-    let response = await fetch(`/api/designations/${id}`, {
-      method: 'DELETE',
-      headers
-    })
-
-    if (response.ok) {
-      setDns(prevState => prevState.filter(obj => obj._id !== id))
-    } else {
-      alert('Error deleting designation')
+    try {
+      await deleteTrigger({id})
+      await mutate()
+      reset()
+    } catch (e) {
+      console.error("error deleting designations")
     }
   }
 
   const formSubmit = async (data) => {
-    let response = await fetch("/api/designations/add", {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers
-    })
-
-    if (response.ok) {
-      response = await response.json()
-      setDns(prevState => [...prevState, response])
+    try {
+      await postTrigger(data)
+      await mutate()
       reset()
-    } else {
-      response = await response.json()
-      alert(response.message)
+    } catch (e) {
+      console.error("error adding designations")
     }
   }
 
@@ -94,7 +86,7 @@ export default function DesignationForm({title}) {
           <Paper elevation={2} sx={{p: 2, mt: 5}}>
             {
               isLoading
-                ? <Loading />
+                ? <Loading/>
                 : <AvailableDesignations dns={dns} deleteDns={deleteDns}/>
             }
           </Paper>

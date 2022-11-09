@@ -34,7 +34,7 @@ const SUCCESS_MESSAGE = 'Form Submitted Successfully'
 
 // countries fetcher
 const COUNTRIES_URL = '/api/countries.json'
-const fetcher = (url, headers) => fetch(url, {headers}).then((res) => res.json());
+// const fetcher = (url, headers) => fetch(url, {headers}).then((res) => res.json());
 
 export default function UserForm({title, id = null, isEdit = false, defaultValues = {}}) {
 
@@ -76,7 +76,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
     'Content-type': 'application/json'
   }
 
-  const {data: countriesWithStates, error} = useSWR([COUNTRIES_URL, headers], fetcher);
+  const {data: countriesWithStates, error} = useSWR([COUNTRIES_URL]);
 
   React.useEffect(function () {
     if (countriesWithStates) {

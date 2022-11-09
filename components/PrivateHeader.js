@@ -7,16 +7,19 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-// import RightLinks from "./RightLinks";
 import {useRouter} from "next/router";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
+import ListItemText from "@mui/material/ListItemText";
+import LogoutIcon from '@mui/icons-material/Logout';
+import SidebarItems from "./SidebarItems";
 
 
 // only for logged in users
-const PublicHeader = (props) => {
+const PrivateHeader = (props) => {
   const router = useRouter()
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -37,16 +40,10 @@ const PublicHeader = (props) => {
   };
 
   const goLogout = () => {
+    localStorage.removeItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)
     handleCloseNavMenu()
     router.push("/")
   }
-
-  const pages = [
-    {
-      text: 'Logout',
-      link: goLogout
-    },
-  ];
 
   return (
     <AppBar elevation={0} position="sticky" sx={{zIndex: 1, bgcolor: "primary", color: "common.white"}}>
@@ -72,15 +69,12 @@ const PublicHeader = (props) => {
 
           {/* --- desktop view --- */}
           <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
-            {pages.map((page, index) => (
               <Button
-                key={index}
-                onClick={page.link}
-                sx={{my: 2, color: "common.black", display: 'block'}}
+                onClick={goLogout}
+                sx={{my: 2, color: "primary.contrastText", display: 'block'}}
               >
-                {page.text}
+                LOGOUT
               </Button>
-            ))}
           </Box>
 
           {/* --- mobile view --- */}
@@ -130,11 +124,15 @@ const PublicHeader = (props) => {
                 display: {xs: 'block', md: 'none'},
               }}
             >
-              {pages.map((page, index) => (
-                <MenuItem key={index} onClick={page.link}>
-                  <Typography textAlign="center">{page.text}</Typography>
-                </MenuItem>
-              ))}
+              <SidebarItems />
+              <ListItem>
+                <ListItemButton onClick={() => goLogout()}>
+                  <ListItemIcon>
+                    <LogoutIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={'Logout'}/>
+                </ListItemButton>
+              </ListItem>
             </Menu>
           </Box>
 
@@ -144,4 +142,4 @@ const PublicHeader = (props) => {
     </AppBar>
   );
 };
-export default PublicHeader;
+export default PrivateHeader;

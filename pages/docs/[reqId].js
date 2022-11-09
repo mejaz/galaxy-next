@@ -1,9 +1,9 @@
 import React from 'react';
 import {useRouter} from "next/router";
-import DetailView from "../../../components/form/DetailView";
-import PageLayout from "../../../components/PageLayout";
-import useDocDetails from "../../../apiHooks/useDocDetails";
-import Loading from "../../../components/Loading";
+import DetailView from "../../components/form/DetailView";
+import PageLayout from "../../components/PageLayout";
+import useDocDetails from "../../apiHooks/useDocDetails";
+import Loading from "../../components/Loading";
 
 const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Document Details`
 

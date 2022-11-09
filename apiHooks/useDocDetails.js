@@ -1,15 +1,9 @@
 import useSWR from 'swr'
 
 const DETAILS_URL = "/api/docs"
-const fetcher = (url, token) => fetch(url, {
-  headers: {
-    Authorization: token,
-    'Content-type': 'application/json',
-  }
-}).then(res => res.json())
 
-function useProfile(id, token) {
-  const {data, error} = useSWR([`${DETAILS_URL}/${id}`, token], fetcher)
+function useDocDetails(id, token) {
+  const {data, error} = useSWR([`${DETAILS_URL}/${id}`, token])
 
   return {
     details: data,
@@ -18,4 +12,4 @@ function useProfile(id, token) {
   }
 }
 
-export default useProfile
+export default useDocDetails

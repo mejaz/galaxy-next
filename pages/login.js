@@ -87,7 +87,6 @@ export default function Login() {
             }}
             onSubmit={handleSubmit(onSubmit)}
             noValidate
-            autoComplete="off"
           >
             <FormControl variant="standard">
               <InputLabel htmlFor="email">Email</InputLabel>

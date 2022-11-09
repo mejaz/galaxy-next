@@ -36,6 +36,7 @@ export default function CustomDatePicker({
 								maxDate={maxDate}
 								renderInput={(params) => (
 									<TextField
+										required={isRequired}
 										sx={{marginTop: "7px !important", marginBottom: "0px !important"}}
 										variant={"standard"}
 										{...params}
