@@ -13,7 +13,8 @@ export default function CustomDatePicker({
  maxDate,
  errors,
  isRequired,
- defaultValue=''
+ defaultValue= '',
+	disabled= false
 }) {
 	return (
 		<FormControl variant="standard">
@@ -28,6 +29,7 @@ export default function CustomDatePicker({
 					return (
 						<LocalizationProvider dateAdapter={DateFnsUtils}>
 							<DesktopDatePicker
+								disabled={disabled}
 								label={label}
 								inputFormat="dd/MM/yyyy"
 								value={value}
@@ -36,6 +38,7 @@ export default function CustomDatePicker({
 								maxDate={maxDate}
 								renderInput={(params) => (
 									<TextField
+
 										required={isRequired}
 										sx={{marginTop: "7px !important", marginBottom: "0px !important"}}
 										variant={"standard"}

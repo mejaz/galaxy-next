@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Card, CardContent, CardHeader, Chip, Grid} from "@mui/material";
+import {Box, Card, CardContent, CardHeader, Checkbox, Chip, FormControlLabel, Grid} from "@mui/material";
 import CustomInputField from "./partials/CustomInputField";
 import CustomSelectField from "./partials/CustomSelectField";
 import CustomDatePicker from "./partials/CustomDatePicker";
@@ -17,6 +17,7 @@ import CustomAlert from "../CustomAlert";
 import MainCardLayout from "../MainCardLayout";
 import useDesignations from "../../apiHooks/useDesignations";
 import Loading from "../Loading";
+import CustomCheckbox from "./partials/CustomCheckbox";
 
 const MALE_KEY = 'M'
 const FEMALE_KEY = 'F'
@@ -50,6 +51,8 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
   const [gotError, setGotError] = React.useState(false)
   const [errorMsg, setErrorMsg] = React.useState(false)
   const [gotSuccess, setGotSuccess] = React.useState(false)
+
+  const [empActive, setEmpActive] = React.useState(("isActive" in initialValues) ? initialValues.isActive : true)
 
   const authToken = `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`
 
@@ -119,6 +122,11 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
       url = `${EDIT_URL}?${params}`
     } else {
       url = ADD_URL
+    }
+
+    // dont send lwd if emp is active
+    if (empActive) {
+      delete data['lwd']
     }
 
     let response = await fetch(url, {
@@ -227,6 +235,72 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
           </Grid>
 
           <Grid item xs={12} md={6}>
+            <CustomDatePicker
+              id={"doj"}
+              label={"D.O.J."}
+              control={control}
+              minDate={minDoj}
+              maxDate={maxDoj}
+              defaultValue={minDoj}
+              isRequired={true}
+              errors={errors}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Grid container justifyContent={'center'} alignItems={"center"}>
+              <Grid item xs={12} md={3}>
+                <CustomCheckbox
+                  id={"isActive"}
+                  label={"Employee Active?"}
+                  isRequired={true}
+                  control={control}
+                  errors={errors}
+                  defaultValue={true}
+                  additionalOnChange={() => setEmpActive(prevState => !prevState)}
+                />
+              </Grid>
+              <Grid item xs={12} md={9}>
+                <CustomDatePicker
+                  id={"lwd"}
+                  label={"Last Working Date"}
+                  control={control}
+                  minDate={minDoj}
+                  maxDate={maxDoj}
+                  defaultValue={minDoj}
+                  isRequired={!empActive}
+                  errors={errors}
+                  disabled={empActive}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <CustomSelectField
+              id={"nationality"}
+              label={"Nationality"}
+              isRequired={true}
+              valKey={"iso3"}
+              valLabel={"name"}
+              values={allCountries}
+              control={control}
+              errors={errors}
+              defaultValue={"AFG"}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <CustomInputField
+              id={"passNo"}
+              label={"Passport Number"}
+              isRequired={true}
+              maxLength={50}
+              control={control}
+              errors={errors}
+              defaultValue={""}
+            />
+          </Grid>
+          <Divider sx={{width: '100%', my: 5}}/>
+
+          <Grid item xs={12} md={6}>
             <CustomMobileNoField
               id={"primaryMobile"}
               label={"Primary Mobile"}
@@ -271,19 +345,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
               // isReadOnly={true}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
-            <CustomDatePicker
-              id={"doj"}
-              label={"D.O.J."}
-              control={control}
-              minDate={minDoj}
-              maxDate={maxDoj}
-              defaultValue={minDoj}
-              isRequired={true}
-              errors={errors}
-            />
-          </Grid>
-          <Box sx={{width: "100%", mt: 3}}>
+          <Box sx={{width: "100%", my: 5}}>
             <Divider textAlign="center">
               <Chip label={"Local Address"}/>
             </Divider>
@@ -328,7 +390,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
             />
           </Grid>
 
-          <Box sx={{width: "100%", mt: 3}}>
+          <Box sx={{width: "100%", my: 5}}>
             <Divider textAlign="center">
               <Chip label={"Permanent Address"}/>
             </Divider>
