@@ -40,7 +40,7 @@ export default function CustomDatePicker({
 									<TextField
 
 										required={isRequired}
-										sx={{marginTop: "7px !important", marginBottom: "0px !important"}}
+										sx={{marginTop: "1px !important", marginBottom: "0px !important"}}
 										variant={"standard"}
 										{...params}
 									/>

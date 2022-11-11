@@ -16,7 +16,7 @@ export default function QuickLinks({id}) {
 				subheader={'Generate:'}
 				sx={{color: 'common.white', bgcolor: 'secondary.light', "& .MuiCardHeader-subheader": {color: 'common.white'}}}
 			/>
-			<CardContent sx={{width: 320, p: 0, m: 0}}>
+			<CardContent sx={{width: "100%", p: 0, m: 0}}>
 				<MenuList sx={{p: 0, m: 0}}>
 					<MenuItem divider onClick={() => router.push(`/emp/${id}/generate/salary-cert`)}>
 						<ListItemIcon>
@@ -24,11 +24,11 @@ export default function QuickLinks({id}) {
 						</ListItemIcon>
 						<Typography variant={'overline'} color={'secondary'}>Salary Certificate</Typography>
 					</MenuItem>
-					<MenuItem divider onClick={() => router.push(`/emp/${id}/generate/salary-transfer-letter`)}>
+					<MenuItem divider onClick={() => router.push(`/emp/${id}/generate/salary-transfer-certificate`)}>
 						<ListItemIcon>
 							<CurrencyExchangeOutlinedIcon fontSize="small"/>
 						</ListItemIcon>
-						<Typography variant={'overline'} color={'secondary'}>Salary Transfer Letter</Typography>
+						<Typography variant={'overline'} color={'secondary'}>Salary Transfer Certificate</Typography>
 					</MenuItem>
 					<MenuItem onClick={() => router.push(`/emp/${id}/generate/experience-letter`)}>
 						<ListItemIcon>

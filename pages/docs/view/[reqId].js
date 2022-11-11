@@ -62,8 +62,8 @@ export default function ViewPublicDoc() {
             <Grid container columnSpacing={4}>
               <Grid item xs={12}>
                 <CustomInputField
-                  id={"lastName"}
-                  label={"Employee Last Name"}
+                  id={"empId"}
+                  label={"Employee Id"}
                   isRequired={true}
                   maxLength={50}
                   control={control}
@@ -72,15 +72,14 @@ export default function ViewPublicDoc() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <CustomDatePicker
-                  id={"dob"}
-                  label={"Employee D.O.B."}
-                  control={control}
-                  minDate={minDob}
-                  maxDate={maxDob}
-                  defaultValue={maxDob}
+                <CustomInputField
+                  id={"lastName"}
+                  label={"Employee Last Name"}
                   isRequired={true}
+                  maxLength={50}
+                  control={control}
                   errors={errors}
+                  defaultValue={""}
                 />
               </Grid>
             </Grid>

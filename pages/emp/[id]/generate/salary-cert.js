@@ -2,7 +2,7 @@ import React from 'react';
 import SubLayout from "../../../../components/SubLayout";
 import MainCardLayout from "../../../../components/MainCardLayout";
 import Box from "@mui/material/Box";
-import {Grid} from "@mui/material";
+import {Button, Divider, FormControl, Grid, Input, InputLabel, Typography} from "@mui/material";
 import CustomInputField from "../../../../components/form/partials/CustomInputField";
 import {useForm} from "react-hook-form";
 import {LoadingButton} from "@mui/lab";
@@ -11,6 +11,10 @@ import CustomMobileNoField from "../../../../components/form/partials/CustomMobi
 import {useRouter} from "next/router";
 import CustomAlert from "../../../../components/CustomAlert";
 import PageLayout from "../../../../components/PageLayout";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import DisabledInputField from "../../../../components/form/partials/DisabledInputField";
+import Loading from "../../../../components/Loading";
+import useProfileBasic from "../../../../apiHooks/useProfileBasic";
 
 const FileSaver = require('file-saver');
 
@@ -20,6 +24,8 @@ const SUCCESS_MESSAGE = "Salary Certificate generated successfully"
 const SalaryCertificateForm = () => {
   const router = useRouter()
   const {id} = router.query
+  const authToken = `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`
+
   const [loading, setLoading] = React.useState(false)
   // react hook form config
   const {
@@ -34,6 +40,12 @@ const SalaryCertificateForm = () => {
   const [errorMsg, setErrorMsg] = React.useState(false)
   const [gotSuccess, setGotSuccess] = React.useState(false)
 
+  const {profile, isLoading, isError} = useProfileBasic(id, authToken);
+
+  if (isLoading) {
+    return <Loading />
+  }
+
   const formSubmit = async (data) => {
     setLoading(true)
     const SUBMIT_URL = `/api/user/generate/${id}`
@@ -41,7 +53,7 @@ const SalaryCertificateForm = () => {
     data['formType'] = 'SC'
 
     const headers = {
-      Authorization: `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`,
+      Authorization: authToken,
       'Content-type': 'application/json',
     }
 
@@ -54,7 +66,7 @@ const SalaryCertificateForm = () => {
     if (response.ok) {
       let contentDispositionHeader = response.headers.get("Content-Disposition")
       let filename = contentDispositionHeader.split("filename=").pop()
-      let reqId = filename.split("_")[2]
+      let reqId = response.headers.get("requestId")
 
       response = await response.blob()
 
@@ -62,7 +74,7 @@ const SalaryCertificateForm = () => {
       setGotSuccess(true)
       setFormSubmitSuccess(prevState => !prevState)
       setTimeout(() => {
-        router.replace(`/emp/docs/${reqId}`)
+        router.replace(`/docs/${reqId}`)
       }, 500)
 
     } else {
@@ -85,8 +97,9 @@ const SalaryCertificateForm = () => {
            noValidate
            autoComplete="off"
       >
+        <Typography variant={"body1"} color={"info.main"} sx={{mb: 3}}>Please provide the below required details: </Typography>
         <Grid container columnSpacing={4}>
-          <Grid item xs={12} md={9}>
+          <Grid item xs={12} md={7}>
             <CustomInputField
               id={"docNo"}
               label={"Document Number"}
@@ -99,29 +112,7 @@ const SalaryCertificateForm = () => {
               helperText={"e.g. HRD/SC/2022/xxx/AIFIxxx"}
             />
           </Grid>
-          <Grid item xs={12} md={4}>
-            <CustomInputField
-              id={"passportCountry"}
-              label={"Passport Country (Nation)"}
-              isRequired={true}
-              maxLength={20}
-              control={control}
-              errors={errors}
-              helperText={"e.g. Indonesian, American, English"}
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <CustomInputField
-              id={"passportNo"}
-              label={"Passport Number"}
-              isRequired={true}
-              maxLength={20}
-              control={control}
-              errors={errors}
-              defaultValue={""}
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={5}>
             <CustomMobileNoField
               id={"salary"}
               label={"Salary"}
@@ -133,7 +124,43 @@ const SalaryCertificateForm = () => {
             />
           </Grid>
         </Grid>
-        <Box sx={{textAlign: "right", my: 2}}>
+        <Divider sx={{my: 3}}/>
+        <Box>
+          <Typography variant={"body1"} color={"info.main"} sx={{mb: 3}}>Employee info that will be printed on the
+            certificate: </Typography>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={6}>
+              <DisabledInputField id={"empId"} label={"Employee Id"} value={profile.empId}/>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <DisabledInputField id={"fullName"} label={"Full Name"} value={profile.fullName}/>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <DisabledInputField id={"designation"} label={"Designation"} value={profile.designation}/>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <DisabledInputField id={"doj"} label={"Date Of Joining"} value={profile.doj}/>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <DisabledInputField id={"nationality"} label={"Nationality"} value={profile.nationality}/>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <DisabledInputField id={"passNo"} label={"Passport Number"} value={profile.passNo}/>
+            </Grid>
+
+          </Grid>
+        </Box>
+
+        {/*<Divider sx={{my: 3}}/>*/}
+
+        <Box sx={{my: 2, display: 'flex', justifyContent: 'flex-end', gap: '5px'}}>
+          <Button size={"small"} variant="contained" color="secondary" startIcon={<ArrowBackIcon/>}
+                  onClick={() => router.back()}
+          >
+            Go Back
+          </Button>
           <LoadingButton
             loading={loading}
             size="small"

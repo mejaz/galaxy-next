@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Card, CardContent, CardHeader, Checkbox, Chip, FormControlLabel, Grid} from "@mui/material";
+import {Box, Chip, Grid} from "@mui/material";
 import CustomInputField from "./partials/CustomInputField";
 import CustomSelectField from "./partials/CustomSelectField";
 import CustomDatePicker from "./partials/CustomDatePicker";
@@ -13,11 +13,12 @@ import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import DateFnsUtils from "@date-io/date-fns";
 import useSWR from 'swr';
 import {useForm} from "react-hook-form";
-import CustomAlert from "../CustomAlert";
 import MainCardLayout from "../MainCardLayout";
 import useDesignations from "../../apiHooks/useDesignations";
 import Loading from "../Loading";
 import CustomCheckbox from "./partials/CustomCheckbox";
+import useSWRMutation from "swr/mutation";
+import postEmpDetails from "../../apiHooks/postEmpDetails";
 
 const MALE_KEY = 'M'
 const FEMALE_KEY = 'F'
@@ -28,35 +29,27 @@ const GENDERS = [
   {key: FEMALE_KEY, label: FEMALE},
 ]
 
-// for form submit
-const ADD_URL = '/api/user/add'
-const EDIT_URL = '/api/user/edit'
-const SUCCESS_MESSAGE = 'Form Submitted Successfully'
 
 // countries fetcher
 const COUNTRIES_URL = '/api/countries.json'
-// const fetcher = (url, headers) => fetch(url, {headers}).then((res) => res.json());
 
 export default function UserForm({title, id = null, isEdit = false, defaultValues = {}}) {
 
   const [allCountries, setAllCountries] = React.useState([])
   const [localCountry, setLocalCountry] = React.useState('ARE')
-  const [permanentCountry, setPermanentCountry] = React.useState('AFG')
+  const [permanentCountry, setPermanentCountry] = React.useState('')
   const [localCities, setLocalCities] = React.useState([])
   const [permanentCities, setPermanentCities] = React.useState([])
   const [loading, setLoading] = React.useState(false)
   const [initialValues, setInitialValues] = React.useState(defaultValues)
 
-  const [formSubmitSuccess, setFormSubmitSuccess] = React.useState(false)
-  const [gotError, setGotError] = React.useState(false)
-  const [errorMsg, setErrorMsg] = React.useState(false)
-  const [gotSuccess, setGotSuccess] = React.useState(false)
 
   const [empActive, setEmpActive] = React.useState(("isActive" in initialValues) ? initialValues.isActive : true)
 
   const authToken = `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`
 
   const {designations, isLoading, isError} = useDesignations(authToken)
+  const {trigger} = useSWRMutation(authToken, postEmpDetails)
 
   // react hook form config
   const {
@@ -74,10 +67,6 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
   const minDoj = dateFnsObj.addMonths(dateFnsObj.date(), +process.env.NEXT_PUBLIC_MIN_DOJ_MONTHS)
   const maxDoj = dateFnsObj.date()
 
-  const headers = {
-    Authorization: authToken,
-    'Content-type': 'application/json'
-  }
 
   const {data: countriesWithStates, error} = useSWR([COUNTRIES_URL]);
 
@@ -100,48 +89,30 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
   }, [countriesWithStates, localCountry])
 
   React.useEffect(function () {
-    if (countriesWithStates) {
+    if (countriesWithStates && permanentCountry) {
       console.log(permanentCountry)
       let permanentCountryObj = countriesWithStates.filter(obj => obj.iso3 === permanentCountry)[0]
       setPermanentCities(permanentCountryObj.states)
     }
   }, [countriesWithStates, permanentCountry])
 
-  React.useEffect(() => {
-    if (!isEdit) {
-      reset()
-    }
-  }, [formSubmitSuccess])
-
   const formSubmit = async (data) => {
     setLoading(true)
 
-    let url;
-    if (isEdit) {
-      let params = new URLSearchParams({id})
-      url = `${EDIT_URL}?${params}`
-    } else {
-      url = ADD_URL
-    }
-
-    // dont send lwd if emp is active
-    if (empActive) {
-      delete data['lwd']
-    }
-
-    let response = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers
-    })
-
-    if (response.ok) {
-      setGotSuccess(true)
-      setFormSubmitSuccess(prevState => !prevState)
-    } else {
-      response = await response.json()
-      setGotError(true)
-      setErrorMsg(response.message)
+    try {
+      // dont send lwd if emp is active
+      if (empActive) {
+        delete data['lwd']
+      }
+      data = {
+        ...data,isEdit, id
+      }
+      await trigger(data)
+      if(!isEdit) {
+        reset()
+      }
+    } catch (e) {
+      console.error('error saving details')
     }
     setLoading(false)
   }
@@ -200,15 +171,17 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
               errors={errors}
               defaultValue={MALE_KEY}
             />
-            <CustomDatePicker
-              id={"dob"}
-              label={"D.O.B."}
-              control={control}
-              minDate={minDob}
-              maxDate={maxDob}
-              defaultValue={maxDob}
+            <CustomSelectField
+              id={"designation"}
+              label={"Designation"}
               isRequired={true}
+              values={designations}
+              valKey={"_id"}
+              valLabel={"name"}
+              control={control}
               errors={errors}
+              // defaultValue={"ARE"}
+              // isReadOnly={true}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -284,7 +257,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
               values={allCountries}
               control={control}
               errors={errors}
-              defaultValue={"AFG"}
+              defaultValue={""}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -306,7 +279,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
               label={"Primary Mobile"}
               adornVal={"+971"}
               control={control}
-              isRequired={true}
+              isRequired={false}
               errors={errors}
             />
           </Grid>
@@ -324,30 +297,28 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
             <CustomEmailField
               id={"email"}
               label={"Email"}
-              isRequired={true}
+              isRequired={false}
               maxLength={100}
               control={control}
               errors={errors}
               defaultValue={""}
             />
           </Grid>
-          <Grid item xs={6}>
-            <CustomSelectField
-              id={"designation"}
-              label={"Designation"}
-              isRequired={true}
-              values={designations}
-              valKey={"_id"}
-              valLabel={"name"}
+          <Grid item xs={12} md={6}>
+            <CustomDatePicker
+              id={"dob"}
+              label={"D.O.B."}
               control={control}
+              minDate={minDob}
+              maxDate={maxDob}
+              defaultValue={null}
+              isRequired={false}
               errors={errors}
-              // defaultValue={"ARE"}
-              // isReadOnly={true}
             />
           </Grid>
-          <Box sx={{width: "100%", my: 5}}>
+          <Box sx={{width: "100%", mt: 5, mb: 3}}>
             <Divider textAlign="center">
-              <Chip label={"Local Address"}/>
+              <Chip label={"Local Address"} sx={{color: "secondary.light", bgcolor: "transparent"}}/>
             </Divider>
           </Box>
 
@@ -355,7 +326,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
             <CustomInputField
               id={"localAddress"}
               label={"Local Address"}
-              isRequired={true}
+              isRequired={false}
               maxLength={200}
               control={control}
               errors={errors}
@@ -367,7 +338,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
             <CustomSelectField
               id={"localCountry"}
               label={"Country"}
-              isRequired={true}
+              isRequired={false}
               values={allCountries}
               valKey={"iso3"}
               valLabel={"name"}
@@ -381,7 +352,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
             <CustomSelectField
               id={"localCity"}
               label={"City"}
-              isRequired={true}
+              isRequired={false}
               values={localCities}
               valKey={"code"}
               valLabel={"name"}
@@ -390,9 +361,9 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
             />
           </Grid>
 
-          <Box sx={{width: "100%", my: 5}}>
+          <Box sx={{width: "100%", mt: 5, mb: 3}}>
             <Divider textAlign="center">
-              <Chip label={"Permanent Address"}/>
+              <Chip label={"Permanent Address"} sx={{color: "secondary.light", bgcolor: "transparent"}}/>
             </Divider>
           </Box>
 
@@ -400,7 +371,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
             <CustomInputField
               id={"permanentAddress"}
               label={"Permanent Address"}
-              isRequired={true}
+              isRequired={false}
               maxLength={200}
               control={control}
               errors={errors}
@@ -412,13 +383,13 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
             <CustomSelectField
               id={"permanentCountry"}
               label={"Country"}
-              isRequired={true}
+              isRequired={false}
               valKey={"iso3"}
               valLabel={"name"}
               values={allCountries}
               control={control}
               errors={errors}
-              defaultValue={"AFG"}
+              defaultValue={""}
               additionalOnChange={setPermanentCountry}
             />
           </Grid>
@@ -426,7 +397,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
             <CustomSelectField
               id={"permanentCity"}
               label={"City"}
-              isRequired={true}
+              isRequired={false}
               valKey={"code"}
               valLabel={"name"}
               values={permanentCities}
@@ -451,8 +422,5 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
         </Box>
       </Box>
     </MainCardLayout>
-    {gotError && <CustomAlert msg={errorMsg} severity={"error"} isOpen={gotError} parentStateFunc={setGotError}/>}
-    {gotSuccess &&
-    <CustomAlert msg={SUCCESS_MESSAGE} severity={"success"} isOpen={gotSuccess} parentStateFunc={setGotSuccess}/>}
   </>
 }

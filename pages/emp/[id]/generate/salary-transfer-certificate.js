@@ -2,7 +2,7 @@ import React from 'react';
 import SubLayout from "../../../../components/SubLayout";
 import MainCardLayout from "../../../../components/MainCardLayout";
 import Box from "@mui/material/Box";
-import {Grid} from "@mui/material";
+import {Button, Divider, Grid, Typography} from "@mui/material";
 import CustomInputField from "../../../../components/form/partials/CustomInputField";
 import {useForm} from "react-hook-form";
 import {LoadingButton} from "@mui/lab";
@@ -11,6 +11,11 @@ import CustomMobileNoField from "../../../../components/form/partials/CustomMobi
 import PageLayout from "../../../../components/PageLayout";
 import CustomAlert from "../../../../components/CustomAlert";
 import {useRouter} from "next/router";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import DisabledInputField from "../../../../components/form/partials/DisabledInputField";
+import useProfileBasic from "../../../../apiHooks/useProfileBasic";
+import Loading from "../../../../components/Loading";
+
 const FileSaver = require('file-saver');
 
 const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Generate Salary Transfer Letter`
@@ -19,11 +24,14 @@ const SUCCESS_MESSAGE = "Salary Transfer Certificate generated successfully"
 const SalaryTLForm = () => {
   const router = useRouter()
   const {id} = router.query
+  const authToken = `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`
   const [loading, setLoading] = React.useState(false)
   const [formSubmitSuccess, setFormSubmitSuccess] = React.useState(false)
   const [gotError, setGotError] = React.useState(false)
   const [errorMsg, setErrorMsg] = React.useState(false)
   const [gotSuccess, setGotSuccess] = React.useState(false)
+
+  const {profile, isLoading, isError} = useProfileBasic(id, authToken);
 
   // react hook form config
   const {
@@ -40,7 +48,7 @@ const SalaryTLForm = () => {
     data['formType'] = 'STC'
 
     const headers = {
-      Authorization: `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`,
+      Authorization: authToken,
       'Content-type': 'application/json',
     }
 
@@ -53,7 +61,7 @@ const SalaryTLForm = () => {
     if (response.ok) {
       let contentDispositionHeader = response.headers.get("Content-Disposition")
       let filename = contentDispositionHeader.split("filename=").pop()
-      let reqId = filename.split("_")[2]
+      let reqId = response.headers.get("requestId")
 
       response = await response.blob()
 
@@ -61,7 +69,7 @@ const SalaryTLForm = () => {
       setGotSuccess(true)
       setFormSubmitSuccess(prevState => !prevState)
       setTimeout(() => {
-        router.replace(`/emp/docs/${reqId}`)
+        router.replace(`/docs/${reqId}`)
       }, 500)
 
     } else {
@@ -73,8 +81,12 @@ const SalaryTLForm = () => {
     setLoading(false)
   }
 
+  if (isLoading) {
+    return <Loading/>
+  }
+
   return (
-    <MainCardLayout title={'Salary Transfer Letter'}>
+    <MainCardLayout title={'Salary Transfer Certificate'}>
       <Box component={"form"}
            sx={{
              mb: "0",
@@ -84,8 +96,9 @@ const SalaryTLForm = () => {
            noValidate
            autoComplete="off"
       >
+        <Typography variant={"body1"} color={"info.main"} sx={{mb: 3}}>Please provide the below required details: </Typography>
         <Grid container columnSpacing={4}>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={7}>
             <CustomInputField
               id={"docNo"}
               label={"Document Number"}
@@ -98,28 +111,7 @@ const SalaryTLForm = () => {
               helperText={"e.g. HRD/STL/2022/xxx/AIFIxxx"}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
-            <CustomInputField
-              id={"passportCountry"}
-              label={"Passport Country (Nation)"}
-              isRequired={true}
-              maxLength={20}
-              control={control}
-              errors={errors}
-              helperText={"e.g. Indonesian, American, English"}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <CustomInputField
-              id={"passportNo"}
-              label={"Passport Number"}
-              isRequired={true}
-              maxLength={20}
-              control={control}
-              errors={errors}
-              defaultValue={""}
-            />
-          </Grid>
+          <Grid item xs={12} md={5}></Grid>
           <Grid item xs={12} md={4}>
             <CustomInputField
               id={"accNo"}
@@ -152,7 +144,39 @@ const SalaryTLForm = () => {
             />
           </Grid>
         </Grid>
-        <Box sx={{textAlign: "right", my: 2}}>
+        <Divider sx={{my: 3}}/>
+        <Box>
+          <Typography variant={"body1"} color={"info.main"} sx={{mb: 3}}>Employee info that will be printed on the
+            certificate: </Typography>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={6}>
+              <DisabledInputField id={"fullName"} label={"Full Name"} value={profile.fullName}/>
+            </Grid>
+            <Grid item xs={12} md={6}></Grid>
+
+            <Grid item xs={12} md={6}>
+              <DisabledInputField id={"designation"} label={"Designation"} value={profile.designation}/>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <DisabledInputField id={"doj"} label={"Date Of Joining"} value={profile.doj}/>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <DisabledInputField id={"nationality"} label={"Nationality"} value={profile.nationality}/>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <DisabledInputField id={"passNo"} label={"Passport Number"} value={profile.passNo}/>
+            </Grid>
+
+          </Grid>
+        </Box>
+
+        <Box sx={{my: 2, display: 'flex', justifyContent: 'flex-end', gap: '5px'}}>
+          <Button size={"small"} variant="contained" color="secondary" startIcon={<ArrowBackIcon/>}
+                  onClick={() => router.back()}
+          >
+            Go Back
+          </Button>
           <LoadingButton
             loading={loading}
             size="small"
@@ -172,7 +196,7 @@ const SalaryTLForm = () => {
   )
 }
 
-export default function SalaryTransferLetter() {
+export default function SalaryTransferCertificate() {
   return (
     <PageLayout pageTitle={PAGE_TITLE}>
       <SalaryTLForm/>
@@ -180,4 +204,4 @@ export default function SalaryTransferLetter() {
   )
 }
 
-SalaryTransferLetter.authRequired = true
+SalaryTransferCertificate.authRequired = true

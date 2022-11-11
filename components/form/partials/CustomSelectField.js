@@ -44,6 +44,7 @@ export default function CustomSelectField({
 						}}
 						disabled={isReadOnly}
 					>
+						<MenuItem value=""><em>None</em></MenuItem>
 						{
 							values.map(obj => <MenuItem key={obj[valKey]} value={obj[valKey]}>{obj[valLabel]}</MenuItem>)
 						}
