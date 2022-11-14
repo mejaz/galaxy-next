@@ -24,11 +24,11 @@ export default function QuickLinks({id}) {
 						</ListItemIcon>
 						<Typography variant={'overline'} color={'secondary'}>Salary Certificate</Typography>
 					</MenuItem>
-					<MenuItem divider onClick={() => router.push(`/emp/${id}/generate/salary-transfer-certificate`)}>
+					<MenuItem divider onClick={() => router.push(`/emp/${id}/generate/salary-transfer-letter`)}>
 						<ListItemIcon>
 							<CurrencyExchangeOutlinedIcon fontSize="small"/>
 						</ListItemIcon>
-						<Typography variant={'overline'} color={'secondary'}>Salary Transfer Certificate</Typography>
+						<Typography variant={'overline'} color={'secondary'}>Salary Transfer Letter</Typography>
 					</MenuItem>
 					<MenuItem onClick={() => router.push(`/emp/${id}/generate/experience-letter`)}>
 						<ListItemIcon>

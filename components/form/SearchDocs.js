@@ -25,6 +25,8 @@ const columns = [
     id: 'issuedOn',
     label: 'Issued On',
     minWidth: 100,
+    type: 'date',
+    format: "DD-MMM-YYYY"
   },
   {
     id: 'isSignedUploaded',

@@ -1,14 +1,14 @@
 import React from 'react';
 import {useRouter} from "next/router";
 import PageLayout from "../../../../components/PageLayout";
-import SCForm from "../../../../components/form/partials/sc/SCForm";
+import STLForm from "../../../../components/form/partials/stl/STLForm";
 import CertificateForm from "../../../../components/form/CertificateForm";
 
-const FORM_TITLE = "Salary Certificate"
+const FORM_TITLE = "Salary Transfer Letter"
 const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Generate ${FORM_TITLE}`
-const FORM_TYPE = "SC"
+const FORM_TYPE = "STL"
 
-export default function SalaryCert() {
+export default function SalaryTransferLetter() {
   const router = useRouter()
   const {id} = router.query
   const authToken = `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`
@@ -19,12 +19,12 @@ export default function SalaryCert() {
         id={id}
         title={FORM_TITLE}
         authToken={authToken}
-        editableFields={<SCForm.EditItems/>}
-        readOnlyFields={<SCForm.ReadOnlyItems/>}
+        editableFields={<STLForm.EditItems/>}
+        readOnlyFields={<STLForm.ReadOnlyItems/>}
         formType={FORM_TYPE}
       />
     </PageLayout>
   )
 }
 
-SalaryCert.authRequired = true
+SalaryTransferLetter.authRequired = true

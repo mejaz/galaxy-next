@@ -8,11 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Link from "next/link";
-
-const getDate = (dateStr) => {
-	let nowDate = new Date(dateStr);
-	return nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate();
-}
+import moment from "moment"
 
 export default function StickyHeadTable({rows, cols, actionRoute}) {
 	const [page, setPage] = React.useState(0);
@@ -59,8 +55,8 @@ export default function StickyHeadTable({rows, cols, actionRoute}) {
 													</Link>
 												</TableCell>
 												: <TableCell key={i} align={column.align}>
-													{column.format && typeof value === 'number'
-														? column.format(value)
+													{column.type === 'date'
+														? moment(value).format(column.format)
 														: typeof value === "boolean" ? String(value).toUpperCase() : value}
 												</TableCell>
 										})}

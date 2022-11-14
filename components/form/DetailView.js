@@ -3,12 +3,8 @@ import {
   Box,
   Button,
   ButtonGroup,
-  ClickAwayListener,
   Divider,
   Grid,
-  Grow,
-  MenuList,
-  Popper,
   Typography
 } from "@mui/material";
 import MainCardLayout from "../MainCardLayout";
@@ -20,10 +16,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DocDeleteModal from "../modals/DocDeleteModal";
 import UploadIcon from '@mui/icons-material/Upload';
-import MenuItem from "@mui/material/MenuItem";
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import FileUploadModal from "../modals/FileUploadModal";
-
+import moment from "moment"
 const FileSaver = require('file-saver');
 
 const SpacedItems = ({children}) => (
@@ -135,7 +129,7 @@ export default function DetailView({title, details}) {
 
             <SpacedItems>
               <Typography variant={'body1'} color={"info.light"}>Issued On</Typography>
-              <Typography variant={'body1'}>{details.issuedOn}</Typography>
+              <Typography variant={'body1'}>{moment(details.issuedOn).format("DD-MMM-YYYY")}</Typography>
             </SpacedItems>
             <Divider/>
 
@@ -207,7 +201,7 @@ export default function DetailView({title, details}) {
           <Grid item xs={12} md={6}>
             <SpacedItems>
               <Typography variant={'body1'} color={"info.light"}>Employee Email</Typography>
-              <Typography variant={'body1'}>{`${details.issuedTo.email}`}</Typography>
+              <Typography variant={'body1'}>{`${details.issuedTo.email ? details.issuedTo.email : "Not Available"}`}</Typography>
             </SpacedItems>
           </Grid>
         </Grid>

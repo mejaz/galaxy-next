@@ -20,6 +20,8 @@ const columns = [
 		id: 'dob',
 		label: 'D.O.B.',
 		minWidth: 100,
+    type: 'date',
+    format: "DD-MMM-YYYY"
 	},
 	{
 		id: 'primaryMobile',
