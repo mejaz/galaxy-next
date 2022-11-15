@@ -51,13 +51,20 @@ export default function StickyHeadTable({rows, cols, actionRoute}) {
 											return cols.length - 1 === i
 												? <TableCell key={i} align={column.align}>
 													<Link href={actionRoute ? actionRoute.replace("#id", row._id) : "#"}>
-														<a>View</a>
+														<a target={"_blank"}>View</a>
 													</Link>
 												</TableCell>
 												: <TableCell key={i} align={column.align}>
 													{column.type === 'date'
-														? moment(value).format(column.format)
-														: typeof value === "boolean" ? String(value).toUpperCase() : value}
+														? value ? moment(value).format(column.format) : "Not Available"
+														: typeof value === "boolean"
+															? String(value).toUpperCase()
+															: column.type === 'mobNo'
+																? value
+																	? `0${value}`
+																	: "Not Available"
+																: value
+													}
 												</TableCell>
 										})}
 									</TableRow>

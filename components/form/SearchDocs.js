@@ -6,39 +6,9 @@ import {LoadingButton} from "@mui/lab";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import StickyHeadTable from "../DataTable";
 import {useForm} from "react-hook-form";
+import {SEARCH_DOC_TABLE_COLS as columns} from "../../constants"
 
 const SEARCH_URL = "/api/docs/search"
-const columns = [
-  {id: 'docNo', label: 'Doc No', minWidth: 200},
-  {id: 'docType', label: 'Doc type', minWidth: 100},
-  {
-    id: 'issuedTo',
-    label: 'Issued To',
-    minWidth: 150,
-  },
-  {
-    id: 'issuedBy',
-    label: 'Issued By',
-    minWidth: 150,
-  },
-  {
-    id: 'issuedOn',
-    label: 'Issued On',
-    minWidth: 100,
-    type: 'date',
-    format: "DD-MMM-YYYY"
-  },
-  {
-    id: 'isSignedUploaded',
-    label: 'Is Doc Signed?',
-    minWidth: 50,
-  },
-  {
-    id: 'action',
-    label: 'Action',
-    minWidth: 50,
-  },
-];
 
 export default function SearchDocs({title}) {
   const {control, handleSubmit, reset, formState: {errors}} = useForm({mode: 'onSubmit'});

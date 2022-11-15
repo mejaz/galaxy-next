@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Grid} from "@mui/material";
+import {Box, Divider, Grid, Typography} from "@mui/material";
 import MainCardLayout from "../MainCardLayout";
 import CustomInputField from "./partials/CustomInputField";
 import {LoadingButton} from "@mui/lab";
@@ -7,33 +7,9 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import StickyHeadTable from "../DataTable";
 import {useForm} from "react-hook-form";
 
+import {SEARCH_EMPLOYEE_TABLE_COLS as columns} from "../../constants"
+
 const SEARCH_URL = "/api/user/search"
-const columns = [
-	{id: 'empId', label: 'Id', minWidth: 50},
-	{id: 'firstName', label: 'First Name', minWidth: 170},
-	{
-		id: 'lastName',
-		label: 'Last Name',
-		minWidth: 170,
-	},
-	{
-		id: 'dob',
-		label: 'D.O.B.',
-		minWidth: 100,
-    type: 'date',
-    format: "DD-MMM-YYYY"
-	},
-	{
-		id: 'primaryMobile',
-		label: 'Primary Mobile',
-		minWidth: 170,
-	},
-	{
-		id: 'action',
-		label: 'Action',
-		minWidth: 100,
-	},
-];
 
 export default function SearchForm({title}) {
   const {control, handleSubmit, reset, formState: {errors}} = useForm({mode: 'onSubmit'});
@@ -47,6 +23,11 @@ export default function SearchForm({title}) {
   }
 
   const formSubmit = async (data) => {
+    if (Object.values(data).filter(Boolean).length === 0) {
+      alert("At least one field required to perform search")
+      return
+    }
+
     let params = new URLSearchParams(data)
     let url = `${SEARCH_URL}?${params}`
 
@@ -71,10 +52,10 @@ export default function SearchForm({title}) {
              }}
              onSubmit={handleSubmit(formSubmit)}
              noValidate
-             autoComplete="off"
         >
+          <Typography variant={"body1"} color={"info.main"}>Search by any of the fields below:</Typography>
           <Grid container columnSpacing={4}>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
               <CustomInputField
                 id={"empId"}
                 label={"Employee ID"}
@@ -85,7 +66,19 @@ export default function SearchForm({title}) {
                 defaultValue={""}
               />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
+              <CustomInputField
+                id={"mobNo"}
+                label={"Mobile Number"}
+                isRequired={false}
+                maxLength={50}
+                control={control}
+                errors={errors}
+                defaultValue={""}
+                helperText={"e.g. 0561234567"}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
               <CustomInputField
                 id={"firstName"}
                 label={"First Name"}
@@ -96,7 +89,7 @@ export default function SearchForm({title}) {
                 defaultValue={""}
               />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
               <CustomInputField
                 id={"lastName"}
                 label={"Last Name"}
@@ -121,8 +114,13 @@ export default function SearchForm({title}) {
             </LoadingButton>
           </Box>
         </Box>
+        <Divider sx={{my: 3}}/>
+        {
+          rows.length > 0
+            ? <StickyHeadTable rows={rows} cols={columns} actionRoute={"/emp/#id/edit"}/>
+            : <Typography variant={"body1"} color={"info.main"} sx={{mb: 3}}>No data to display</Typography>
+        }
       </MainCardLayout>
-      <StickyHeadTable rows={rows} cols={columns} actionRoute={"/emp/#id/edit"}/>
     </>
   )
 }
