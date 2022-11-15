@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Grid} from "@mui/material";
+import {Box, Divider, Grid, Typography} from "@mui/material";
 import MainCardLayout from "../MainCardLayout";
 import CustomInputField from "./partials/CustomInputField";
 import {LoadingButton} from "@mui/lab";
@@ -48,8 +48,9 @@ export default function SearchDocs({title}) {
              noValidate
              autoComplete="off"
         >
+          <Typography variant={"body1"} color={"info.main"}>Search by any of the fields below:</Typography>
           <Grid container columnSpacing={4}>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
               <CustomInputField
                 id={"docNo"}
                 label={"Document Number"}
@@ -59,7 +60,8 @@ export default function SearchDocs({title}) {
                 errors={errors}
               />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}></Grid>
+            <Grid item xs={12} md={6}>
               <CustomInputField
                 id={"empId"}
                 label={"Employee Id"}
@@ -67,9 +69,10 @@ export default function SearchDocs({title}) {
                 maxLength={10}
                 control={control}
                 errors={errors}
+                helperText={"Employee Id of the employee to whom doc was issued"}
               />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
               <CustomInputField
                 id={"lastName"}
                 label={"Employee Last Name"}
@@ -95,8 +98,14 @@ export default function SearchDocs({title}) {
             </LoadingButton>
           </Box>
         </Box>
+        <Divider sx={{my: 3}}/>
+        {
+          rows.length > 0
+            ? <StickyHeadTable rows={rows} cols={columns} actionRoute={"/docs/#id"}/>
+            : <Typography variant={"body1"} color={"info.main"} sx={{mb: 3}}>No data to display</Typography>
+        }
+
       </MainCardLayout>
-      <StickyHeadTable rows={rows} cols={columns} actionRoute={"/docs/#id"}/>
     </>
   )
 }

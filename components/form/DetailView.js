@@ -135,7 +135,7 @@ export default function DetailView({title, details}) {
 
             <SpacedItems>
               <Typography variant={'body1'} color={"info.light"}>Issued By</Typography>
-              <Typography variant={'body1'}>{`${details.issuedBy.firstName} ${details.issuedBy.lastName}`}</Typography>
+              <Typography variant={'body1'}>{details.issuedBy.lastName}</Typography>
             </SpacedItems>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -205,13 +205,6 @@ export default function DetailView({title, details}) {
             </SpacedItems>
           </Grid>
         </Grid>
-
-        <Divider/>
-        <Box sx={{width: '100%', textAlign: 'right', my: 3}}>
-          <Button size={"small"} variant="contained" color="primary" startIcon={<ArrowBackIcon/>}
-                  onClick={() => router.back()}
-          >Go Back</Button>
-        </Box>
 
         <DocDeleteModal
           open={openDeleteModal}

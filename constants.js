@@ -28,33 +28,33 @@ export const SEARCH_EMPLOYEE_TABLE_COLS = [
 ]
 
 export const SEARCH_DOC_TABLE_COLS = [
-  {id: 'docNo', label: 'Doc No', minWidth: 200},
+  {id: 'docNo', label: 'Doc No', minWidth: 100},
   {id: 'docType', label: 'Doc type', minWidth: 100},
   {
     id: 'issuedTo',
     label: 'Issued To',
-    minWidth: 150,
+    minWidth: 200,
   },
   {
     id: 'issuedBy',
     label: 'Issued By',
-    minWidth: 150,
+    minWidth: 10,
   },
   {
     id: 'issuedOn',
     label: 'Issued On',
-    minWidth: 100,
+    minWidth: 140,
     type: 'date',
-    format: "DD-MMM-YYYY"
+    format: "DD/MMM/YYYY"
   },
   {
     id: 'isSignedUploaded',
-    label: 'Is Doc Signed?',
-    minWidth: 50,
+    label: 'Signed?',
+    minWidth: 10,
   },
   {
     id: 'action',
     label: 'Action',
-    minWidth: 50,
+    minWidth: 10,
   },
 ]

@@ -3,7 +3,7 @@ import useSWR from 'swr'
 const DETAILS_URL = "/api/docs"
 
 function useDocDetails(id, token) {
-  const {data, error} = useSWR([`${DETAILS_URL}/${id}`, token])
+  const {data, error} = useSWR(id ? [`${DETAILS_URL}/${id}`, token] : null)
 
   return {
     details: data,
