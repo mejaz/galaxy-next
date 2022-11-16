@@ -7,21 +7,34 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import StickyHeadTable from "../DataTable";
 import {useForm} from "react-hook-form";
 import {SEARCH_DOC_TABLE_COLS as columns} from "../../constants"
+import CustomSelectField from "./partials/CustomSelectField";
+import useDesignations from "../../apiHooks/useDesignations";
+import useDocTypes from "../../apiHooks/useDocTypes";
+import Loading from "../Loading";
 
 const SEARCH_URL = "/api/docs/search"
 
 export default function SearchDocs({title}) {
+  const authToken = `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`
   const {control, handleSubmit, reset, formState: {errors}} = useForm({mode: 'onSubmit'});
 
   const [loading, setLoading] = React.useState(false)
   const [rows, setRows] = React.useState([])
 
+  const {docTypes, isLoading, isError} = useDocTypes(authToken)
+
   const headers = {
-    Authorization: `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`,
+    Authorization: authToken,
     'Content-type': 'application/json'
   }
 
   const formSubmit = async (data) => {
+    let dataClone = {...data}
+    delete dataClone["docType"]
+    if (Object.values(dataClone).filter(Boolean).length === 0) {
+      alert("At least one field required to perform search")
+      return
+    }
     let params = new URLSearchParams(data)
     let url = `${SEARCH_URL}?${params}`
 
@@ -35,6 +48,10 @@ export default function SearchDocs({title}) {
       console.log('error')
     }
 
+  }
+
+  if (isLoading) {
+    return <Loading />
   }
   return (
     <>
@@ -51,6 +68,18 @@ export default function SearchDocs({title}) {
           <Typography variant={"body1"} color={"info.main"}>Search by any of the fields below:</Typography>
           <Grid container columnSpacing={4}>
             <Grid item xs={12} md={6}>
+              <CustomSelectField
+                id={"docType"}
+                label={"Document Type"}
+                isRequired={false}
+                values={docTypes}
+                control={control}
+                errors={errors}
+                defaultValue={""}
+                emptyLabel={"All"}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
               <CustomInputField
                 id={"docNo"}
                 label={"Document Number"}
@@ -60,7 +89,6 @@ export default function SearchDocs({title}) {
                 errors={errors}
               />
             </Grid>
-            <Grid item xs={12} md={6}></Grid>
             <Grid item xs={12} md={6}>
               <CustomInputField
                 id={"empId"}

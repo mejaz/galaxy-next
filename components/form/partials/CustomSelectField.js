@@ -16,11 +16,12 @@ export default function CustomSelectField({
 	valLabel='label',
 	isReadOnly=false,
 	defaultValue = "",
-	additionalOnChange=null
+	additionalOnChange=null,
+	emptyLabel = null
  }) {
 	return (
 		<FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
-			<InputLabel id={id} required={isRequired}>{label}</InputLabel>
+			<InputLabel shrink id={id} required={isRequired}>{label}</InputLabel>
 			<Controller
 				name={id}
 				control={control}
@@ -34,6 +35,7 @@ export default function CustomSelectField({
 						value={value}
 						// onBlur={onBlur}
 						// onChange={onChange}
+						displayEmpty
 						onChange={(e) => {
 							if (additionalOnChange) {
 								onChange(e)
@@ -44,7 +46,7 @@ export default function CustomSelectField({
 						}}
 						disabled={isReadOnly}
 					>
-						<MenuItem value=""><em>None</em></MenuItem>
+						<MenuItem value=""><em>{emptyLabel ? emptyLabel : "abc"}</em></MenuItem>
 						{
 							values.map(obj => <MenuItem key={obj[valKey]} value={obj[valKey]}>{obj[valLabel]}</MenuItem>)
 						}
