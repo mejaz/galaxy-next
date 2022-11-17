@@ -8,50 +8,40 @@ import StickyHeadTable from "../DataTable";
 import {useForm} from "react-hook-form";
 import {SEARCH_DOC_TABLE_COLS as columns} from "../../constants"
 import CustomSelectField from "./partials/CustomSelectField";
-import useDesignations from "../../apiHooks/useDesignations";
 import useDocTypes from "../../apiHooks/useDocTypes";
 import Loading from "../Loading";
+import useSearch from "../../apiHooks/useSearch";
 
 const SEARCH_URL = "/api/docs/search"
 
 export default function SearchDocs({title}) {
+  const [searchFields, setSearchFields] = React.useState({})
+  const [resetToggle, setResetToggle] = React.useState(false)
+  const [showErr, setShowErr] = React.useState(false)
+
   const authToken = `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`
   const {control, handleSubmit, reset, formState: {errors}} = useForm({mode: 'onSubmit'});
 
   const [loading, setLoading] = React.useState(false)
-  const [rows, setRows] = React.useState([])
 
   const {docTypes, isLoading, isError} = useDocTypes(authToken)
-
-  const headers = {
-    Authorization: authToken,
-    'Content-type': 'application/json'
-  }
+  const resetPageToggle = () => setResetToggle(prevState => !prevState)
 
   const formSubmit = async (data) => {
-    let dataClone = {...data}
-    delete dataClone["docType"]
-    if (Object.values(dataClone).filter(Boolean).length === 0) {
-      alert("At least one field required to perform search")
-      return
-    }
-    let params = new URLSearchParams(data)
-    let url = `${SEARCH_URL}?${params}`
-
-    let response = await fetch(url, {headers})
-
-    if (response.ok) {
-      response = await response.json()
-      setRows([...response])
-      console.log('okay')
+    if (Object.values(data).filter(Boolean).length <= 0) {
+      setShowErr(true)
     } else {
-      console.log('error')
+      setShowErr(false)
+      setLoading(true)
+      setSearchFields({...data})
+      resetPageToggle()
+      setLoading(false)
     }
 
   }
 
   if (isLoading) {
-    return <Loading />
+    return <Loading/>
   }
   return (
     <>
@@ -66,6 +56,9 @@ export default function SearchDocs({title}) {
              autoComplete="off"
         >
           <Typography variant={"body1"} color={"info.main"}>Search by any of the fields below:</Typography>
+          {showErr && <Typography variant={"subtitle2"} color={"error.main"} sx={{my: 2}}>
+            ** At least one field is required to perform search **
+          </Typography>}
           <Grid container columnSpacing={4}>
             <Grid item xs={12} md={6}>
               <CustomSelectField
@@ -114,6 +107,7 @@ export default function SearchDocs({title}) {
             </Grid>
           </Grid>
           <Box sx={{textAlign: "right", my: 2,}}>
+
             <LoadingButton
               loading={loading}
               size="small"
@@ -127,12 +121,15 @@ export default function SearchDocs({title}) {
           </Box>
         </Box>
         <Divider sx={{my: 3}}/>
-        {
-          rows.length > 0
-            ? <StickyHeadTable rows={rows} cols={columns} actionRoute={"/docs/#id"}/>
-            : <Typography variant={"body1"} color={"info.main"} sx={{mb: 3}}>No data to display</Typography>
-        }
-
+        <StickyHeadTable
+          authToken={authToken}
+          searchFields={searchFields}
+          dataHook={useSearch}
+          cols={columns}
+          actionRoute={"/docs/#id"}
+          resetToggle={resetToggle}
+          baseUrl={SEARCH_URL}
+        />
       </MainCardLayout>
     </>
   )

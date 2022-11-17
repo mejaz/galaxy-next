@@ -8,37 +8,31 @@ import StickyHeadTable from "../DataTable";
 import {useForm} from "react-hook-form";
 
 import {SEARCH_EMPLOYEE_TABLE_COLS as columns} from "../../constants"
+import useSearch from "../../apiHooks/useSearch";
 
 const SEARCH_URL = "/api/user/search"
 
 export default function SearchForm({title}) {
+  const [searchFields, setSearchFields] = React.useState({})
+  const [resetToggle, setResetToggle] = React.useState(false)
+  const [showErr, setShowErr] = React.useState(false)
+
+  const authToken = `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`
   const {control, handleSubmit, reset, formState: {errors}} = useForm({mode: 'onSubmit'});
 
   const [loading, setLoading] = React.useState(false)
-  const [rows, setRows] = React.useState([])
 
-  const headers = {
-    Authorization: `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`,
-    'Content-type': 'application/json'
-  }
+  const resetPageToggle = () => setResetToggle(prevState => !prevState)
 
   const formSubmit = async (data) => {
-    if (Object.values(data).filter(Boolean).length === 0) {
-      alert("At least one field required to perform search")
-      return
-    }
-
-    let params = new URLSearchParams(data)
-    let url = `${SEARCH_URL}?${params}`
-
-    let response = await fetch(url, {headers})
-
-    if (response.ok) {
-      response = await response.json()
-      setRows([...response])
-      console.log('okay')
+    if (Object.values(data).filter(Boolean).length <= 0) {
+      setShowErr(true)
     } else {
-      console.log('error')
+      setShowErr(false)
+      setLoading(true)
+      setSearchFields({...data})
+      resetPageToggle()
+      setLoading(false)
     }
 
   }
@@ -54,6 +48,9 @@ export default function SearchForm({title}) {
              noValidate
         >
           <Typography variant={"body1"} color={"info.main"}>Search by any of the fields below:</Typography>
+          {showErr && <Typography variant={"subtitle2"} color={"error.main"} sx={{my: 2}}>
+            ** At least one field is required to perform search **
+          </Typography>}
           <Grid container columnSpacing={4}>
             <Grid item xs={12} md={6}>
               <CustomInputField
@@ -115,11 +112,15 @@ export default function SearchForm({title}) {
           </Box>
         </Box>
         <Divider sx={{my: 3}}/>
-        {
-          rows.length > 0
-            ? <StickyHeadTable rows={rows} cols={columns} actionRoute={"/emp/#id/edit"}/>
-            : <Typography variant={"body1"} color={"info.main"} sx={{mb: 3}}>No data to display</Typography>
-        }
+        <StickyHeadTable
+          authToken={authToken}
+          searchFields={searchFields}
+          dataHook={useSearch}
+          cols={columns}
+          actionRoute={"/emp/#id/edit"}
+          resetToggle={resetToggle}
+          baseUrl={SEARCH_URL}
+        />
       </MainCardLayout>
     </>
   )
