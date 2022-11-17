@@ -1,8 +1,17 @@
 import React from 'react';
-import WorkAreaLayout from "../../components/WorkAreaLayout";
+import SearchForm from "../../components/form/SearchForm";
+import PageLayout from "../../components/PageLayout";
+
+const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Search Employee`
+
 
 export default function Search() {
-	return <WorkAreaLayout><h1>Search Employee</h1></WorkAreaLayout>
+
+	return (
+		<PageLayout pageTitle={PAGE_TITLE}>
+			<SearchForm title={"Search Employee"} />
+		</PageLayout>
+	)
 }
 
 Search.authRequired = true

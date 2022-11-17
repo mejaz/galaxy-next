@@ -1,16 +1,19 @@
 import React from 'react';
-import {FormControl, Input, InputAdornment, InputLabel} from "@mui/material";
+import {FormControl, FormHelperText, Input, InputLabel} from "@mui/material";
 import FormErrorText from "./FormErrorText";
 import {Controller} from "react-hook-form";
 
-export default function CustomMobileNoField({
+export default function CustomInputField({
 	 id,
 	 label,
 	 isRequired,
 	 maxLength,
 	 control,
 	 errors,
-	 defaultValue = ""
+	 defaultValue = "",
+   disable=false,
+	 placeholder="",
+	 helperText = ""
  }) {
 	return (
 		<FormControl variant="standard">
@@ -29,11 +32,13 @@ export default function CustomMobileNoField({
 						value={value}
 						onBlur={onBlur}
 						onChange={onChange}
-						startAdornment={<InputAdornment position="start">+971</InputAdornment>}
+						disabled={disable}
+						placeholder={placeholder}
 					/>
 				)}/>
-			{errors[id]?.type === 'required' && <FormErrorText text={`${label} is Required`}/>}
-			{errors[id]?.type === 'maxLength' && <FormErrorText text={`Cannot be more than ${maxLength} chars`}/>}
+			{helperText && <FormHelperText id="filled-weight-helper-text">{helperText}</FormHelperText>}
+			{errors && errors[id]?.type === 'required' && <FormErrorText text={`${label} is Required`}/>}
+			{errors && errors[id]?.type === 'maxLength' && <FormErrorText text={`Cannot be more than ${maxLength} chars`}/>}
 		</FormControl>
 	)
 }
