@@ -24,7 +24,7 @@ const PrivateHeader = (props) => {
   const router = useRouter()
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const company = localStorage.getItem(process.env.NEXT_PUBLIC_COMPANY_STORAGE)
+  // const company = localStorage.getItem(process.env.NEXT_PUBLIC_COMPANY_STORAGE)
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -47,7 +47,7 @@ const PrivateHeader = (props) => {
     router.push("/")
   }
 
-  const getCompany = () => localStorage.getItem(process.env.NEXT_PUBLIC_COMPANY_STORAGE)
+  // const getCompany = () => localStorage.getItem(process.env.NEXT_PUBLIC_COMPANY_STORAGE)
 
   return (
     <AppBar elevation={0} position="sticky" sx={{zIndex: 1, bgcolor: "primary", color: "common.white"}}>
@@ -71,22 +71,22 @@ const PrivateHeader = (props) => {
             >
               {process.env.NEXT_PUBLIC_COMMON_HEADER}
             </Typography>
-            <Box>
-              {
-                company && company.toLowerCase() === "aifi"
-                  ? <Chip
-                    size={"small"}
-                    label={company}
-                    sx={{backgroundColor: "company.main", color: "company.contrastText", position: 'absolute', top: 12, ml: 1}}
-                  />
-                  : <Chip
-                    size={"small"}
-                    label={company}
-                    sx={{backgroundColor: "company.main", color: "company.contrastText", position: 'absolute', top: 12, ml: 1}}
-                  />
-              }
+            {/*<Box>*/}
+            {/*  {*/}
+            {/*    company && company.toLowerCase() === "aifi"*/}
+            {/*      ? <Chip*/}
+            {/*        size={"small"}*/}
+            {/*        label={company}*/}
+            {/*        sx={{backgroundColor: "company.main", color: "company.contrastText", position: 'absolute', top: 12, ml: 1}}*/}
+            {/*      />*/}
+            {/*      : <Chip*/}
+            {/*        size={"small"}*/}
+            {/*        label={company}*/}
+            {/*        sx={{backgroundColor: "company.main", color: "company.contrastText", position: 'absolute', top: 12, ml: 1}}*/}
+            {/*      />*/}
+            {/*  }*/}
 
-            </Box>
+            {/*</Box>*/}
           </Box>
 
 
