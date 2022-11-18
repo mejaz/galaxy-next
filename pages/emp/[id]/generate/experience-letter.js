@@ -5,7 +5,7 @@ import ELForm from "../../../../components/form/partials/el/ELForm";
 import CertificateForm from "../../../../components/form/CertificateForm";
 
 const FORM_TITLE = "Experience Letter"
-const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Generate ${FORM_TITLE}`
+const PAGE_TITLE = `${process.env.NEXT_PUBLIC_COMMON_HEADER} : Generate ${FORM_TITLE}`
 const FORM_TYPE = "EL"
 
 export default function ExperienceLetter() {

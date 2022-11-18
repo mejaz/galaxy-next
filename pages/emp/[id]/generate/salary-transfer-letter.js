@@ -5,7 +5,7 @@ import STLForm from "../../../../components/form/partials/stl/STLForm";
 import CertificateForm from "../../../../components/form/CertificateForm";
 
 const FORM_TITLE = "Salary Transfer Letter"
-const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Generate ${FORM_TITLE}`
+const PAGE_TITLE = `${process.env.NEXT_PUBLIC_COMMON_HEADER} : Generate ${FORM_TITLE}`
 const FORM_TYPE = "STL"
 
 export default function SalaryTransferLetter() {

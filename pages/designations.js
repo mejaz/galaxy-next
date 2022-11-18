@@ -3,7 +3,7 @@ import SubLayout from "../components/SubLayout";
 import DesignationForm from "../components/form/DesignationForm";
 import PageLayout from "../components/PageLayout";
 
-const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Designations`
+const PAGE_TITLE = `${process.env.NEXT_PUBLIC_COMMON_HEADER} : Designations`
 
 export default function Designations() {
 	return (

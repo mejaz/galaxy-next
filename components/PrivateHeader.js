@@ -16,6 +16,7 @@ import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import ListItemText from "@mui/material/ListItemText";
 import LogoutIcon from '@mui/icons-material/Logout';
 import SidebarItems from "./SidebarItems";
+import {Chip} from "@mui/material";
 
 
 // only for logged in users
@@ -23,6 +24,7 @@ const PrivateHeader = (props) => {
   const router = useRouter()
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const company = localStorage.getItem(process.env.NEXT_PUBLIC_COMPANY_STORAGE)
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -45,36 +47,57 @@ const PrivateHeader = (props) => {
     router.push("/")
   }
 
+  const getCompany = () => localStorage.getItem(process.env.NEXT_PUBLIC_COMPANY_STORAGE)
+
   return (
     <AppBar elevation={0} position="sticky" sx={{zIndex: 1, bgcolor: "primary", color: "common.white"}}>
       <Container maxWidth="xxl">
         <Toolbar disableGutters>
           {/* --- desktop view --- */}
-          <Typography
-            variant="h5"
-            noWrap
-            component="div"
-            onClick={() => router.push("/")}
-            sx={{
-              flexGrow: 1,
-              mr: 2,
-              cursor: "pointer",
-              display: {xs: 'none', md: 'flex'},
-              letterSpacing: 1,
-              fontFamily: "'Dancing Script', cursive, 'Sora', sans-serif",
-            }}
-          >
-            {process.env.NEXT_PUBLIC_BRAND_NAME}
-          </Typography>
+          <Box sx={{
+            flexGrow: 1,
+            mr: 2,
+            display: {xs: 'none', md: 'flex'},
+          }}>
+            <Typography
+              variant="h5"
+              noWrap
+              component="div"
+              onClick={() => router.push("/")}
+              sx={{
+                cursor: "pointer",
+                letterSpacing: 1,
+              }}
+            >
+              {process.env.NEXT_PUBLIC_COMMON_HEADER}
+            </Typography>
+            <Box>
+              {
+                company && company.toLowerCase() === "aifi"
+                  ? <Chip
+                    size={"small"}
+                    label={company}
+                    sx={{backgroundColor: "company.main", color: "company.contrastText", position: 'absolute', top: 12, ml: 1}}
+                  />
+                  : <Chip
+                    size={"small"}
+                    label={company}
+                    sx={{backgroundColor: "company.main", color: "company.contrastText", position: 'absolute', top: 12, ml: 1}}
+                  />
+              }
+
+            </Box>
+          </Box>
+
 
           {/* --- desktop view --- */}
           <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
-              <Button
-                onClick={goLogout}
-                sx={{my: 2, color: "primary.contrastText", display: 'block'}}
-              >
-                LOGOUT
-              </Button>
+            <Button
+              onClick={goLogout}
+              sx={{my: 2, color: "primary.contrastText", display: 'block'}}
+            >
+              LOGOUT
+            </Button>
           </Box>
 
           {/* --- mobile view --- */}
@@ -88,10 +111,9 @@ const PrivateHeader = (props) => {
               cursor: "pointer",
               display: {xs: 'flex', md: 'none'},
               letterSpacing: 1,
-              fontFamily: "'Dancing Script', cursive, 'Sora', sans-serif",
             }}
           >
-            {process.env.NEXT_PUBLIC_BRAND_NAME}
+            {process.env.NEXT_PUBLIC_COMMON_HEADER}
           </Typography>
 
           {/* --- mobile view --- */}
@@ -124,11 +146,11 @@ const PrivateHeader = (props) => {
                 display: {xs: 'block', md: 'none'},
               }}
             >
-              <SidebarItems />
+              <SidebarItems/>
               <ListItem>
                 <ListItemButton onClick={() => goLogout()}>
                   <ListItemIcon>
-                    <LogoutIcon />
+                    <LogoutIcon/>
                   </ListItemIcon>
                   <ListItemText primary={'Logout'}/>
                 </ListItemButton>

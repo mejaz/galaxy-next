@@ -5,7 +5,7 @@ import SCForm from "../../../../components/form/partials/sc/SCForm";
 import CertificateForm from "../../../../components/form/CertificateForm";
 
 const FORM_TITLE = "Salary Certificate"
-const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Generate ${FORM_TITLE}`
+const PAGE_TITLE = `${process.env.NEXT_PUBLIC_COMMON_HEADER} : Generate ${FORM_TITLE}`
 const FORM_TYPE = "SC"
 
 export default function SalaryCert() {

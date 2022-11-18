@@ -2,7 +2,7 @@ import React from 'react';
 import SubLayout from "../../components/SubLayout";
 import SearchDocs from "../../components/form/SearchDocs";
 
-const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Search Document`
+const PAGE_TITLE = `${process.env.NEXT_PUBLIC_COMMON_HEADER} : Search Document`
 
 export default function Search() {
 

@@ -20,7 +20,7 @@ const BG_IMAGE_SVG = `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/20
 const LOGIN_API_URL = '/api/login/'
 const DASHBOARD_ROUTE = '/dashboard'
 const INVALID_LOGIN_MSG = "Invalid Username or Password"
-const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Home`
+const PAGE_TITLE = `${process.env.NEXT_PUBLIC_COMMON_HEADER} : Home`
 
 const Container = ({children}) => {
   return (
@@ -59,6 +59,7 @@ export default function Login() {
       response = await response.json()
       // set the token to local storage
       localStorage.setItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE, response.token)
+      localStorage.setItem(process.env.NEXT_PUBLIC_COMPANY_STORAGE, response.company)
       await router.push(DASHBOARD_ROUTE)
       setLoading(false)
     } else {

@@ -5,7 +5,7 @@ import PageLayout from "../../components/PageLayout";
 import useDocDetails from "../../apiHooks/useDocDetails";
 import Loading from "../../components/Loading";
 
-const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Document Details`
+const PAGE_TITLE = `${process.env.NEXT_PUBLIC_COMMON_HEADER} : Document Details`
 
 export default function CertInfo() {
   const router = useRouter()

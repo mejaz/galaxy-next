@@ -6,7 +6,7 @@ import useProfile from "../../../../apiHooks/useProfile";
 import PageLayout from "../../../../components/PageLayout";
 import Loading from "../../../../components/Loading";
 
-const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Employee Details`
+const PAGE_TITLE = `${process.env.NEXT_PUBLIC_COMMON_HEADER} : Employee Details`
 
 export default function Edit() {
 	const router = useRouter()

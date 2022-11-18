@@ -2,7 +2,7 @@ import React from 'react';
 import SearchForm from "../../components/form/SearchForm";
 import PageLayout from "../../components/PageLayout";
 
-const PAGE_TITLE = `${process.env.NEXT_PUBLIC_BRAND_NAME} : Search Employee`
+const PAGE_TITLE = `${process.env.NEXT_PUBLIC_COMMON_HEADER} : Search Employee`
 
 
 export default function Search() {

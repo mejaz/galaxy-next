@@ -64,10 +64,10 @@ const PublicHeader = (props) => {
               cursor: "pointer",
               display: {xs: 'none', md: 'flex'},
               letterSpacing: 1,
-              fontFamily: "'Dancing Script', cursive, 'Sora', sans-serif",
+              // fontFamily: "'Dancing Script', cursive, 'Sora', sans-serif",
             }}
           >
-            {process.env.NEXT_PUBLIC_BRAND_NAME}
+            {process.env.NEXT_PUBLIC_COMMON_HEADER}
           </Typography>
 
           {/* --- desktop view --- */}
@@ -94,10 +94,10 @@ const PublicHeader = (props) => {
               cursor: "pointer", 
               display: {xs: 'flex', md: 'none'}, 
               letterSpacing: 1,
-              fontFamily: "'Dancing Script', cursive, 'Sora', sans-serif",
+              // fontFamily: "'Dancing Script', cursive, 'Sora', sans-serif",
             }}
           >
-            {process.env.NEXT_PUBLIC_BRAND_NAME}
+            {process.env.NEXT_PUBLIC_COMMON_HEADER}
           </Typography>
 
           {/* --- mobile view --- */}
