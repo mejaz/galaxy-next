@@ -57,7 +57,7 @@ export default function StickyHeadTable({cols, baseUrl, authToken, searchFields,
                         return cols.length - 1 === i
                           ? <TableCell key={i} align={column.align}>
                             <Link href={actionRoute ? actionRoute.replace("#id", row._id) : "#"}>
-                              <a target={"_blank"}>View</a>
+                              <a>View</a>
                             </Link>
                           </TableCell>
                           : <TableCell key={i} align={column.align}>

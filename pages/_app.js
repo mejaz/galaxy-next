@@ -40,6 +40,9 @@ function MyApp({Component, pageProps}) {
   const [open, setOpen] = React.useState(false)
   const [severity, setSeverity] = React.useState('')
 
+  // list the paths where we dont want to show the success message or handle it separately
+  const avoidSuccessMsgPaths = ["/login"]
+
   const handleClose = () => {
     setMsg("")
     setOpen(false)
@@ -53,6 +56,9 @@ function MyApp({Component, pageProps}) {
           fetcher: fetcher,
           onError: (error, key) => {
             if (error.status === 401) {
+              setSeverity("error")
+              setMsg(error.message)
+              setOpen(true)
               router.push(LOGIN_PAGE_ROUTE)
             } else {
               setSeverity("error")
@@ -61,7 +67,7 @@ function MyApp({Component, pageProps}) {
             }
           },
           onSuccess: async (response, key, config) => {
-            if (response instanceof Response) {
+            if (response instanceof Response && avoidSuccessMsgPaths.indexOf(router.pathname) === -1) {
               setSeverity("success")
               setMsg((await response.json()).message)
               setOpen(true)

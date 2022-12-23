@@ -180,6 +180,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
               valLabel={"name"}
               control={control}
               errors={errors}
+              emptyLabel={"Select Designation"}
               // defaultValue={"ARE"}
               // isReadOnly={true}
             />
@@ -258,6 +259,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
               control={control}
               errors={errors}
               defaultValue={""}
+              emptyLabel={"Select Nationality"}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -346,6 +348,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
               errors={errors}
               defaultValue={"ARE"}
               isReadOnly={true}
+              emptyLabel={"Select Country"}
             />
           </Grid>
           <Grid item xs={6}>
@@ -358,6 +361,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
               valLabel={"name"}
               control={control}
               errors={errors}
+              emptyLabel={"Select City"}
             />
           </Grid>
 
@@ -391,6 +395,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
               errors={errors}
               defaultValue={""}
               additionalOnChange={setPermanentCountry}
+              emptyLabel={"Select Country"}
             />
           </Grid>
           <Grid item xs={6}>
@@ -403,6 +408,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
               values={permanentCities}
               control={control}
               errors={errors}
+              emptyLabel={"Select City"}
             />
           </Grid>
 

@@ -1,11 +1,19 @@
 import React from 'react';
 import {useRouter} from "next/router";
-import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Loading from "../components/Loading";
 
 export default function Index() {
   const router = useRouter()
 
+  React.useEffect(() => {
+    router.push("/login")
+  }, [])
+
   return (
-    <Button variant={'outlined'} onClick={() => router.push("/login")}>Login</Button>
+    <Box sx={{width: '100%', display: 'flex', alignItems: "center", justifyContent: 'center'}}>
+      <Loading />
+    </Box>
+
   )
 }

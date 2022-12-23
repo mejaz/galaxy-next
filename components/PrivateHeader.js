@@ -12,11 +12,10 @@ import {useRouter} from "next/router";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import ListItemText from "@mui/material/ListItemText";
 import LogoutIcon from '@mui/icons-material/Logout';
 import SidebarItems from "./SidebarItems";
-import {Chip} from "@mui/material";
+import CompanySuperScript from "./CompanySuperScript";
 
 
 // only for logged in users
@@ -24,7 +23,7 @@ const PrivateHeader = (props) => {
   const router = useRouter()
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  // const company = localStorage.getItem(process.env.NEXT_PUBLIC_COMPANY_STORAGE)
+  const company = localStorage.getItem(process.env.NEXT_PUBLIC_COMPANY_STORAGE)
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -44,10 +43,8 @@ const PrivateHeader = (props) => {
   const goLogout = () => {
     localStorage.removeItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)
     handleCloseNavMenu()
-    router.push("/")
+    router.push("/login")
   }
-
-  // const getCompany = () => localStorage.getItem(process.env.NEXT_PUBLIC_COMPANY_STORAGE)
 
   return (
     <AppBar elevation={0} position="sticky" sx={{zIndex: 1, bgcolor: "primary", color: "common.white"}}>
@@ -63,7 +60,7 @@ const PrivateHeader = (props) => {
               variant="h5"
               noWrap
               component="div"
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/dashboard")}
               sx={{
                 cursor: "pointer",
                 letterSpacing: 1,
@@ -71,22 +68,7 @@ const PrivateHeader = (props) => {
             >
               {process.env.NEXT_PUBLIC_COMMON_HEADER}
             </Typography>
-            {/*<Box>*/}
-            {/*  {*/}
-            {/*    company && company.toLowerCase() === "aifi"*/}
-            {/*      ? <Chip*/}
-            {/*        size={"small"}*/}
-            {/*        label={company}*/}
-            {/*        sx={{backgroundColor: "company.main", color: "company.contrastText", position: 'absolute', top: 12, ml: 1}}*/}
-            {/*      />*/}
-            {/*      : <Chip*/}
-            {/*        size={"small"}*/}
-            {/*        label={company}*/}
-            {/*        sx={{backgroundColor: "company.main", color: "company.contrastText", position: 'absolute', top: 12, ml: 1}}*/}
-            {/*      />*/}
-            {/*  }*/}
-
-            {/*</Box>*/}
+            <Box>{company && <CompanySuperScript company={company} />}</Box>
           </Box>
 
 
@@ -101,20 +83,27 @@ const PrivateHeader = (props) => {
           </Box>
 
           {/* --- mobile view --- */}
-          <Typography
-            variant="h5"
-            noWrap
-            component="div"
-            onClick={() => router.push("/")}
-            sx={{
-              flexGrow: 1,
-              cursor: "pointer",
-              display: {xs: 'flex', md: 'none'},
-              letterSpacing: 1,
-            }}
-          >
-            {process.env.NEXT_PUBLIC_COMMON_HEADER}
-          </Typography>
+          <Box sx={{
+            flexGrow: 1,
+            mr: 2,
+            display: {md: 'none'},
+          }}>
+            <Typography
+              variant="h5"
+              noWrap
+              component="div"
+              onClick={() => router.push("/dashboard")}
+              sx={{
+                flexGrow: 1,
+                cursor: "pointer",
+                display: {xs: 'flex', md: 'none'},
+                letterSpacing: 1,
+              }}
+            >
+              {process.env.NEXT_PUBLIC_COMMON_HEADER}
+            </Typography>
+            <Box>{company && <CompanySuperScript company={company} />}</Box>
+          </Box>
 
           {/* --- mobile view --- */}
           <Box sx={{display: {xs: 'flex', md: 'none'}}}>
@@ -157,8 +146,6 @@ const PrivateHeader = (props) => {
               </ListItem>
             </Menu>
           </Box>
-
-
         </Toolbar>
       </Container>
     </AppBar>
