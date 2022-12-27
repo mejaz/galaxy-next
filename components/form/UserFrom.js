@@ -33,7 +33,7 @@ const GENDERS = [
 // countries fetcher
 const COUNTRIES_URL = '/api/countries.json'
 
-export default function UserForm({title, id = null, isEdit = false, defaultValues = {}}) {
+export default function UserForm({title, id = null, isEdit = false, defaultValues = {}, mutate}) {
 
   const [allCountries, setAllCountries] = React.useState([])
   const [localCountry, setLocalCountry] = React.useState('ARE')
@@ -57,14 +57,22 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
     formState: {errors}
   } = useForm({
     mode: 'onTouched',
-    defaultValues: initialValues
+    defaultValues: Object.keys(initialValues).length > 0 ? {
+      ...initialValues,
+      localAddress: initialValues.localAddress.streetAddress,
+      localCountry: initialValues.localAddress.country,
+      localCity: initialValues.localAddress.city,
+      permanentAddress: initialValues.permanentAddress.streetAddress,
+      permanentCountry: initialValues.permanentAddress.country,
+      permanentCity: initialValues.permanentAddress.city,
+    } : {}
   });
 
   // min / max dates
   const dateFnsObj = new DateFnsUtils()
   const minDob = dateFnsObj.addMonths(dateFnsObj.date(), +process.env.NEXT_PUBLIC_MIN_DOB_MONTHS)
   const maxDob = dateFnsObj.addMonths(dateFnsObj.date(), +process.env.NEXT_PUBLIC_MAX_DOB_MONTHS)
-  const minDoj = dateFnsObj.addMonths(dateFnsObj.date(), +process.env.NEXT_PUBLIC_MIN_DOJ_MONTHS)
+  const minDoj = dateFnsObj.date(new Date(2016, 0, 1))  // 1st Jan 2016
   const maxDoj = dateFnsObj.date()
 
 
@@ -76,7 +84,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
       setPermanentCountry(countriesWithStates[0].iso3)
 
       if (isEdit) {
-        setPermanentCountry(defaultValues.permanentCountry)
+        setPermanentCountry(defaultValues.permanentAddress.country)
       }
     }
   }, [countriesWithStates])
@@ -111,6 +119,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
       if(!isEdit) {
         reset()
       }
+      mutate()
     } catch (e) {
       console.error('error saving details')
     }

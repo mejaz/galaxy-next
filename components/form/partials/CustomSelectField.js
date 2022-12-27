@@ -48,7 +48,7 @@ export default function CustomSelectField({
 					>
 						<MenuItem value=""><em>{emptyLabel ? emptyLabel : "Select"}</em></MenuItem>
 						{
-							values.map(obj => <MenuItem key={obj[valKey]} value={obj[valKey]}>{obj[valLabel]}</MenuItem>)
+							values && values.map(obj => <MenuItem key={obj[valKey]} value={obj[valKey]}>{obj[valLabel]}</MenuItem>)
 						}
 					</Select>
 				)}/>

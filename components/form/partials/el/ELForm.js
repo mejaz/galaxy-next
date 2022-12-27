@@ -5,7 +5,7 @@ import DisabledInputField from "../DisabledInputField";
 
 const ELForm = {}
 
-const EditItems = ({control, errors}) => {
+const EditItems = ({docNo, control, errors}) => {
   return (
     <>
       <Grid item xs={12} md={7}>
@@ -16,9 +16,9 @@ const EditItems = ({control, errors}) => {
           maxLength={50}
           control={control}
           errors={errors}
-          placeholder="HRD/CE/2022/xxx"
-          defaultValue={"HRD/CE/2022/"}
-          helperText={"e.g. HRD/CE/2022/xxx"}
+          placeholder={docNo}
+          defaultValue={docNo}
+          helperText={`e.g. ${docNo}`}
         />
       </Grid>
     </>

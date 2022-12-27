@@ -27,6 +27,8 @@ const fetcher = ([url, token]) => (
     } else {
       if (res.status === 401) {
         let error = new Error('Not authorized')
+        localStorage.removeItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)
+        localStorage.removeItem(process.env.NEXT_PUBLIC_COMPANY_STORAGE)
         error.status = 401
         throw error
       }

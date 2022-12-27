@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SUBMIT_URL = `/api/user/generate/#id`
+const SUBMIT_URL = `/api/docs/generate/#id`
 
 async function postCertData(token, {arg}) {
   const {id, ...data} = arg

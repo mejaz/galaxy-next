@@ -18,6 +18,9 @@ import DocDeleteModal from "../modals/DocDeleteModal";
 import UploadIcon from '@mui/icons-material/Upload';
 import FileUploadModal from "../modals/FileUploadModal";
 import moment from "moment"
+import {LoadingButton} from "@mui/lab";
+import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
+
 const FileSaver = require('file-saver');
 
 const SpacedItems = ({children}) => (
@@ -201,10 +204,19 @@ export default function DetailView({title, details}) {
           <Grid item xs={12} md={6}>
             <SpacedItems>
               <Typography variant={'body1'} color={"info.light"}>Employee Email</Typography>
-              <Typography variant={'body1'}>{`${details.issuedTo.email ? details.issuedTo.email : "Not Available"}`}</Typography>
+              <Typography
+                variant={'body1'}>{`${details.issuedTo.email ? details.issuedTo.email : "Not Available"}`}</Typography>
             </SpacedItems>
           </Grid>
         </Grid>
+
+        <Box sx={{my: 2, display: 'flex', justifyContent: 'flex-end', gap: '5px'}}>
+          <Button size={"small"} variant="contained" color="secondary" startIcon={<ArrowBackIcon/>}
+                  onClick={() => router.back()}
+          >
+            Go Back
+          </Button>
+        </Box>
 
         <DocDeleteModal
           open={openDeleteModal}
