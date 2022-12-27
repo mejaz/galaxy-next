@@ -6,7 +6,7 @@ import DisabledInputField from "../DisabledInputField";
 
 const SCForm = {}
 
-const EditItems = ({control, errors}) => {
+const EditItems = ({docNo, control, errors}) => {
   return (
     <>
       <Grid item xs={12} md={7}>
@@ -17,9 +17,9 @@ const EditItems = ({control, errors}) => {
           maxLength={100}
           control={control}
           errors={errors}
-          placeholder="HRD/SC/2022/xxx/AIFIxxx"
-          defaultValue={"HRD/SC/2022/"}
-          helperText={"e.g. HRD/SC/2022/xxx/AIFIxxx"}
+          placeholder={docNo}
+          defaultValue={docNo}
+          helperText={`e.g. ${docNo}`}
         />
       </Grid>
       <Grid item xs={12} md={5}>

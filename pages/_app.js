@@ -27,6 +27,8 @@ const fetcher = ([url, token]) => (
     } else {
       if (res.status === 401) {
         let error = new Error('Not authorized')
+        localStorage.removeItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)
+        localStorage.removeItem(process.env.NEXT_PUBLIC_COMPANY_STORAGE)
         error.status = 401
         throw error
       }
@@ -39,6 +41,9 @@ function MyApp({Component, pageProps}) {
   const [msg, setMsg] = React.useState("")
   const [open, setOpen] = React.useState(false)
   const [severity, setSeverity] = React.useState('')
+
+  // list the paths where we dont want to show the success message or handle it separately
+  const avoidSuccessMsgPaths = ["/login"]
 
   const handleClose = () => {
     setMsg("")
@@ -53,6 +58,9 @@ function MyApp({Component, pageProps}) {
           fetcher: fetcher,
           onError: (error, key) => {
             if (error.status === 401) {
+              setSeverity("error")
+              setMsg(error.message)
+              setOpen(true)
               router.push(LOGIN_PAGE_ROUTE)
             } else {
               setSeverity("error")
@@ -61,7 +69,7 @@ function MyApp({Component, pageProps}) {
             }
           },
           onSuccess: async (response, key, config) => {
-            if (response instanceof Response) {
+            if (response instanceof Response && avoidSuccessMsgPaths.indexOf(router.pathname) === -1) {
               setSeverity("success")
               setMsg((await response.json()).message)
               setOpen(true)

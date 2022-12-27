@@ -1,24 +1,17 @@
 import React from 'react'
 
-const SUBMIT_URL = `/api/docs/generate/#id`
-
-async function postCertData(token, {arg}) {
-  const {id, ...data} = arg
-
+async function postLogin(url, {arg}) {
   const headers = {
-    Authorization: token,
     'Content-type': 'application/json',
   }
-  const url = SUBMIT_URL.replace("#id", id)
   let response = await fetch(url, {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: JSON.stringify(arg),
     headers
   })
 
   if (response.ok) {
-    const headers = response.headers
-    return {blob: await response.blob(), headers}
+    return response
   } else {
     if (response.status === 401) {
       let error = new Error('Not authorized')
@@ -33,4 +26,4 @@ async function postCertData(token, {arg}) {
   }
 }
 
-export default postCertData
+export default postLogin
