@@ -10,7 +10,7 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import {useRouter} from "next/router";
-
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 // only for logged in users
 const PublicHeader = (props) => {
@@ -49,7 +49,7 @@ const PublicHeader = (props) => {
     <AppBar position="sticky" sx={{bgcolor: "transparent", color: "common.black"}}>
       <Container maxWidth="xxl">
         <Toolbar disableGutters>
-          {/* --- desktop view --- */}
+          <KeyboardDoubleArrowRightIcon sx={{fontSize: '30px'}}/>
           <Typography
             variant="h5"
             noWrap
@@ -61,6 +61,7 @@ const PublicHeader = (props) => {
               cursor: "pointer",
               display: {xs: 'none', md: 'flex'},
               letterSpacing: 1,
+              fontStyle: 'italic',
               // fontFamily: "'Dancing Script', cursive, 'Sora', sans-serif",
             }}
           >
@@ -87,9 +88,9 @@ const PublicHeader = (props) => {
             component="div"
             onClick={() => router.push("/login")}
             sx={{
-              flexGrow: 1, 
-              cursor: "pointer", 
-              display: {xs: 'flex', md: 'none'}, 
+              flexGrow: 1,
+              cursor: "pointer",
+              display: {xs: 'flex', md: 'none'},
               letterSpacing: 1,
               // fontFamily: "'Dancing Script', cursive, 'Sora', sans-serif",
             }}

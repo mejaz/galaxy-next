@@ -16,6 +16,7 @@ import ListItemText from "@mui/material/ListItemText";
 import LogoutIcon from '@mui/icons-material/Logout';
 import SidebarItems from "./SidebarItems";
 import CompanySuperScript from "./CompanySuperScript";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 
 
 // only for logged in users
@@ -56,6 +57,7 @@ const PrivateHeader = (props) => {
             mr: 2,
             display: {xs: 'none', md: 'flex'},
           }}>
+            <KeyboardDoubleArrowRightIcon sx={{fontSize: '30px'}}/>
             <Typography
               variant="h5"
               noWrap
@@ -64,6 +66,7 @@ const PrivateHeader = (props) => {
               sx={{
                 cursor: "pointer",
                 letterSpacing: 1,
+                fontStyle: 'italic',
               }}
             >
               {process.env.NEXT_PUBLIC_COMMON_HEADER}

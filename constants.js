@@ -49,7 +49,8 @@ export const SEARCH_DOC_TABLE_COLS = [
   },
   {
     id: 'isSignedUploaded',
-    label: 'Signed?',
+    label: 'Status',
+    type: 'status',
     minWidth: 10,
   },
   {

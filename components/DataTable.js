@@ -63,8 +63,11 @@ export default function StickyHeadTable({cols, baseUrl, authToken, searchFields,
                           : <TableCell key={i} align={column.align}>
                             {column.type === 'date'
                               ? value ? moment(value).format(column.format) : "Not Available"
-                              : typeof value === "boolean"
-                                ? String(value).toUpperCase()
+                              : column.type === "status"
+                                ? <span style={{
+                                  padding: '1px',
+                                  backgroundColor: String(value).toUpperCase() === 'SIGNED' ? "lightgreen" : 'lightsalmon'
+                                }}>{String(value).toUpperCase()}</span>
                                 : column.type === 'mobNo'
                                   ? value
                                     ? `0${value}`

@@ -49,7 +49,7 @@ export default function DetailView({title, details}) {
   const [loading, setLoading] = React.useState(false)
   const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
   const [openUploadModal, setOpenUploadModal] = React.useState(false);
-  const [isSignedDocAvailable, setIsSignedDocAvailable] = React.useState(Boolean(details.certSignedPath))
+  const [isSignedDocAvailable, setIsSignedDocAvailable] = React.useState(Boolean(details.isSigned))
 
   const deleteDocument = async () => {
     let response = await fetch(`/api/docs/${reqId}`, {
@@ -61,7 +61,9 @@ export default function DetailView({title, details}) {
       setOpenDeleteModal(false)
       await router.replace("/dashboard")
     } else {
-      alert("error deleting document")
+      setOpenDeleteModal(false)
+      response = await response.json()
+      alert(response.message)
     }
   }
 
@@ -165,8 +167,15 @@ export default function DetailView({title, details}) {
               <Divider/>
               <SpacedItems>
                 <Typography variant={'overline'}>Un-signed Document</Typography>
-                <Button size={"small"} variant="contained" color="warning" startIcon={<DownloadOutlinedIcon/>}
-                        onClick={() => downloadDoc(false)}
+                <Button
+                  size={"small"}
+                  variant="contained"
+                  color="warning"
+                  startIcon={<DownloadOutlinedIcon/>}
+                  onClick={isSignedDocAvailable
+                    ? () => alert("Document is already signed")
+                    : () => downloadDoc(false)}
+                  disabled={isSignedDocAvailable}
                 >Download</Button>
               </SpacedItems>
               <Divider/>

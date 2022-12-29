@@ -59,12 +59,12 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
     mode: 'onTouched',
     defaultValues: Object.keys(initialValues).length > 0 ? {
       ...initialValues,
-      localAddress: initialValues.localAddress.streetAddress,
-      localCountry: initialValues.localAddress.country,
-      localCity: initialValues.localAddress.city,
-      permanentAddress: initialValues.permanentAddress.streetAddress,
-      permanentCountry: initialValues.permanentAddress.country,
-      permanentCity: initialValues.permanentAddress.city,
+      localAddress: initialValues.localAddress ? initialValues.localAddress.streetAddress: "",
+      localCountry: initialValues.localAddress ? initialValues.localAddress.country : "",
+      localCity: initialValues.localAddress ? initialValues.localAddress.city : "",
+      permanentAddress: initialValues.permanentAddress ? initialValues.permanentAddress.streetAddress : "",
+      permanentCountry: initialValues.permanentAddress ? initialValues.permanentAddress.country : "",
+      permanentCity: initialValues.permanentAddress ? initialValues.permanentAddress.city : "",
     } : {}
   });
 
@@ -84,7 +84,7 @@ export default function UserForm({title, id = null, isEdit = false, defaultValue
       setPermanentCountry(countriesWithStates[0].iso3)
 
       if (isEdit) {
-        setPermanentCountry(defaultValues.permanentAddress.country)
+        setPermanentCountry(defaultValues.permanentAddress && defaultValues.permanentAddress.country)
       }
     }
   }, [countriesWithStates])

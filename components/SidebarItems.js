@@ -29,7 +29,11 @@ export default function SidebarItems() {
           <ListItemIcon>
             <PersonSearchOutlinedIcon/>
           </ListItemIcon>
-          <ListItemText primary={'Search Employee'}/>
+          <ListItemText
+            primary={'Search Employee'}
+            secondary={"(Generate Documents)"}
+            secondaryTypographyProps={{color: 'red', fontSize: "12px", pt: 1}}
+          />
         </ListItemButton>
       </ListItem>
       <Divider/>
