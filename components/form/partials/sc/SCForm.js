@@ -9,7 +9,7 @@ const SCForm = {}
 const EditItems = ({docNo, control, errors}) => {
   return (
     <>
-      <Grid item xs={12} md={7}>
+      <Grid item xs={12} md={6}>
         <CustomInputField
           id={"docNo"}
           label={"Document Number"}
@@ -22,7 +22,7 @@ const EditItems = ({docNo, control, errors}) => {
           helperText={`e.g. ${docNo}`}
         />
       </Grid>
-      <Grid item xs={12} md={5}>
+      <Grid item xs={12} md={6}>
         <CustomMobileNoField
           id={"salary"}
           label={"Salary"}
@@ -33,17 +33,30 @@ const EditItems = ({docNo, control, errors}) => {
           errors={errors}
         />
       </Grid>
-      <Grid item xs={12} md={7}>
+      <Grid item xs={12} md={6}>
         <CustomInputField
-          id={"addressTo"}
-          label={"Address This Document To"}
+          id={"receivingEntity"}
+          label={"Receiving Entity"}
           isRequired={false}
           maxLength={200}
           control={control}
           errors={errors}
           placeholder={""}
           defaultValue={""}
-          helperText={`e.g. FAB Bank. Hint - if left blank, document will default to "To whomsoever, it may concern"`}
+          helperText={`e.g. FAB Bank`}
+        />
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <CustomInputField
+          id={"receivingEntityAddress"}
+          label={"Receiving Entity Address"}
+          isRequired={false}
+          maxLength={200}
+          control={control}
+          errors={errors}
+          placeholder={""}
+          defaultValue={""}
+          helperText={`e.g. Abu Dhabi, U.A.E.`}
         />
       </Grid>
     </>
