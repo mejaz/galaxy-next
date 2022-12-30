@@ -33,6 +33,19 @@ const EditItems = ({docNo, control, errors}) => {
           errors={errors}
         />
       </Grid>
+      <Grid item xs={12} md={7}>
+        <CustomInputField
+          id={"addressTo"}
+          label={"Address This Document To"}
+          isRequired={false}
+          maxLength={200}
+          control={control}
+          errors={errors}
+          placeholder={""}
+          defaultValue={""}
+          helperText={`e.g. FAB Bank. Hint - if left blank, document will default to "To whomsoever, it may concern"`}
+        />
+      </Grid>
     </>
   )
 }
