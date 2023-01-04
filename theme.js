@@ -1,5 +1,6 @@
 import {createTheme} from "@mui/material/styles";
 import {blueGrey, cyan, pink, grey} from '@mui/material/colors'
+import {palette} from "@mui/system";
 
 let theme = createTheme({
 	palette: {
@@ -34,6 +35,10 @@ let theme = createTheme({
 			dark: '#B16A01',
 			100: '#FEF4CC',
 			200: '#FEE699'
+		},
+		company: {
+			main: "#f88f00",
+			contrastText: "#fff",
 		}
 	},
 	typography: {

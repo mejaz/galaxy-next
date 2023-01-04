@@ -1,35 +1,19 @@
 import React from "react";
 import {useRouter} from "next/router";
-
-const LOGIN_PAGE_ROUTE = '/login'
-const VERIFY_TOKEN_API_URL = '/api/verify-token'
+import useVerifyToken from "../apiHooks/useVerifyToken";
+import Loading from "./Loading";
 
 export default function AuthGuard({children}) {
-  const router = useRouter()
-  const [isLoggedIn, setLoggedIn] = React.useState(false)
+  const [authToken, setAuthToken] = React.useState(null)
+  const {data} = useVerifyToken(authToken)
 
-  React.useEffect(function () {
-    fetch(VERIFY_TOKEN_API_URL, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`,
-        'Content-type': 'application/json'
-      }
-    }).then(response => {
-      if (!response.ok) {
-        localStorage.removeItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)
-        router.push(LOGIN_PAGE_ROUTE)
-      }
-      setLoggedIn(true)
-    }).catch(error => console.log(error))
-  }, [isLoggedIn])
+  React.useEffect(() => {
+    setAuthToken(`Bearer ${localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)}`)
+  }, [])
 
-  if (!isLoggedIn) {
-    return <h1>Loading...</h1>
+  if (!data) {
+    return <Loading />
   }
 
-  const childClone = React.cloneElement(children, {
-    isLoggedIn: isLoggedIn
-  })
-
-  return childClone
+  return <div>{children}</div>
 }

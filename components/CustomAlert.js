@@ -6,23 +6,16 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function ({severity, msg, isOpen}) {
-  const [open, setOpen] = React.useState(isOpen);
+export default function CustomAlert({severity, msg, isOpen, close, parentStateFunc=null}) {
 
-  React.useEffect(function() {
-    setOpen(isOpen)
-  }, [isOpen])
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen(false);
+  const handleClose = () => {
+    // setOpen(false);
+    parentStateFunc && parentStateFunc(false)
+    close()
   };
 
   return (
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{vertical: "top", horizontal: "center"}}>
+    <Snackbar open={isOpen} onClose={handleClose} anchorOrigin={{vertical: "top", horizontal: "center"}}>
       <Alert onClose={handleClose} severity={severity} sx={{width: '100%'}}>
         {msg}
       </Alert>

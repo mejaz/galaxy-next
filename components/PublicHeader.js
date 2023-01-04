@@ -7,13 +7,10 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-// import RightLinks from "./RightLinks";
 import {useRouter} from "next/router";
-
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 // only for logged in users
 const PublicHeader = (props) => {
@@ -50,24 +47,25 @@ const PublicHeader = (props) => {
 
   return (
     <AppBar position="sticky" sx={{bgcolor: "transparent", color: "common.black"}}>
-      <Container maxWidth="xl">
+      <Container maxWidth="xxl">
         <Toolbar disableGutters>
-          {/* --- desktop view --- */}
+          <KeyboardDoubleArrowRightIcon sx={{fontSize: '30px'}}/>
           <Typography
             variant="h5"
             noWrap
             component="div"
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/login")}
             sx={{
               flexGrow: 1,
               mr: 2,
               cursor: "pointer",
               display: {xs: 'none', md: 'flex'},
               letterSpacing: 1,
-              fontFamily: "'Dancing Script', cursive, 'Sora', sans-serif",
+              fontStyle: 'italic',
+              // fontFamily: "'Dancing Script', cursive, 'Sora', sans-serif",
             }}
           >
-            {process.env.NEXT_PUBLIC_BRAND_NAME}
+            {process.env.NEXT_PUBLIC_COMMON_HEADER}
           </Typography>
 
           {/* --- desktop view --- */}
@@ -88,16 +86,16 @@ const PublicHeader = (props) => {
             variant="h5"
             noWrap
             component="div"
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/login")}
             sx={{
-              flexGrow: 1, 
-              cursor: "pointer", 
-              display: {xs: 'flex', md: 'none'}, 
+              flexGrow: 1,
+              cursor: "pointer",
+              display: {xs: 'flex', md: 'none'},
               letterSpacing: 1,
-              fontFamily: "'Dancing Script', cursive, 'Sora', sans-serif",
+              // fontFamily: "'Dancing Script', cursive, 'Sora', sans-serif",
             }}
           >
-            {process.env.NEXT_PUBLIC_BRAND_NAME}
+            {process.env.NEXT_PUBLIC_COMMON_HEADER}
           </Typography>
 
           {/* --- mobile view --- */}
@@ -137,8 +135,6 @@ const PublicHeader = (props) => {
               ))}
             </Menu>
           </Box>
-
-
         </Toolbar>
       </Container>
     </AppBar>

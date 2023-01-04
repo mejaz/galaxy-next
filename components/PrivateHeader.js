@@ -7,19 +7,24 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-// import RightLinks from "./RightLinks";
 import {useRouter} from "next/router";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import LogoutIcon from '@mui/icons-material/Logout';
+import SidebarItems from "./SidebarItems";
+import CompanySuperScript from "./CompanySuperScript";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 
 
 // only for logged in users
-const PublicHeader = (props) => {
+const PrivateHeader = (props) => {
   const router = useRouter()
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const company = localStorage.getItem(process.env.NEXT_PUBLIC_COMPANY_STORAGE)
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -37,68 +42,71 @@ const PublicHeader = (props) => {
   };
 
   const goLogout = () => {
+    localStorage.removeItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE)
     handleCloseNavMenu()
-    router.push("/")
+    router.push("/login")
   }
-
-  const pages = [
-    {
-      text: 'Logout',
-      link: goLogout
-    },
-  ];
 
   return (
     <AppBar elevation={0} position="sticky" sx={{zIndex: 1, bgcolor: "primary", color: "common.white"}}>
-      <Container maxWidth="xl">
+      <Container maxWidth="xxl">
         <Toolbar disableGutters>
           {/* --- desktop view --- */}
-          <Typography
-            variant="h5"
-            noWrap
-            component="div"
-            onClick={() => router.push("/")}
-            sx={{
-              flexGrow: 1,
-              mr: 2,
-              cursor: "pointer",
-              display: {xs: 'none', md: 'flex'},
-              letterSpacing: 1,
-              fontFamily: "'Dancing Script', cursive, 'Sora', sans-serif",
-            }}
-          >
-            {process.env.NEXT_PUBLIC_BRAND_NAME}
-          </Typography>
+          <Box sx={{
+            flexGrow: 1,
+            mr: 2,
+            display: {xs: 'none', md: 'flex'},
+          }}>
+            <KeyboardDoubleArrowRightIcon sx={{fontSize: '30px'}}/>
+            <Typography
+              variant="h5"
+              noWrap
+              component="div"
+              onClick={() => router.push("/dashboard")}
+              sx={{
+                cursor: "pointer",
+                letterSpacing: 1,
+                fontStyle: 'italic',
+              }}
+            >
+              {process.env.NEXT_PUBLIC_COMMON_HEADER}
+            </Typography>
+            <Box>{company && <CompanySuperScript company={company} />}</Box>
+          </Box>
+
 
           {/* --- desktop view --- */}
           <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
-            {pages.map((page, index) => (
-              <Button
-                key={index}
-                onClick={page.link}
-                sx={{my: 2, color: "common.black", display: 'block'}}
-              >
-                {page.text}
-              </Button>
-            ))}
+            <Button
+              onClick={goLogout}
+              sx={{my: 2, color: "primary.contrastText", display: 'block'}}
+            >
+              LOGOUT
+            </Button>
           </Box>
 
           {/* --- mobile view --- */}
-          <Typography
-            variant="h5"
-            noWrap
-            component="div"
-            onClick={() => router.push("/")}
-            sx={{
-              flexGrow: 1,
-              cursor: "pointer",
-              display: {xs: 'flex', md: 'none'},
-              letterSpacing: 1,
-              fontFamily: "'Dancing Script', cursive, 'Sora', sans-serif",
-            }}
-          >
-            {process.env.NEXT_PUBLIC_BRAND_NAME}
-          </Typography>
+          <Box sx={{
+            flexGrow: 1,
+            mr: 2,
+            display: {md: 'none'},
+          }}>
+            <Typography
+              variant="h5"
+              noWrap
+              component="div"
+              onClick={() => router.push("/dashboard")}
+              sx={{
+                flexGrow: 1,
+                cursor: "pointer",
+                display: {xs: 'flex', md: 'none'},
+                letterSpacing: 1,
+              }}
+            >
+              {process.env.NEXT_PUBLIC_COMMON_HEADER}
+            </Typography>
+            <Box>{company && <CompanySuperScript company={company} />}</Box>
+          </Box>
 
           {/* --- mobile view --- */}
           <Box sx={{display: {xs: 'flex', md: 'none'}}}>
@@ -130,18 +138,20 @@ const PublicHeader = (props) => {
                 display: {xs: 'block', md: 'none'},
               }}
             >
-              {pages.map((page, index) => (
-                <MenuItem key={index} onClick={page.link}>
-                  <Typography textAlign="center">{page.text}</Typography>
-                </MenuItem>
-              ))}
+              <SidebarItems/>
+              <ListItem>
+                <ListItemButton onClick={() => goLogout()}>
+                  <ListItemIcon>
+                    <LogoutIcon/>
+                  </ListItemIcon>
+                  <ListItemText primary={'Logout'}/>
+                </ListItemButton>
+              </ListItem>
             </Menu>
           </Box>
-
-
         </Toolbar>
       </Container>
     </AppBar>
   );
 };
-export default PublicHeader;
+export default PrivateHeader;
